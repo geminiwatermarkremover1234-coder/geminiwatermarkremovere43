@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+    <title>Gemini Omni Video Watermark Remover | Client-Side Video Cleaner</title>
+    <meta name="description"
+        content="Remove the visible Gemini logo from 1280x720, 720x1280, 1920x1080, and 1080x1920 videos. Processes completely locally in your browser. No server uploads.">
+    <meta name="keywords"
+        content="gemini video watermark remover, gemini logo remover from video, gemini omni video watermark remover, remove gemini watermark, local video cleaner">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
+
+    <!-- Design styling and assets -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Third-party local script dependencies -->
+    <script src="vendor/mp4box.all.min.js"></script>
+    <script src="vendor/mp4-muxer.min.js"></script>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <!-- Header bar -->
+    <header id="header">
+        <div class="section-container">
+            <nav class="navbar">
+                <a href="#" class="logo-container">
+                    <div class="logo-icon">
+                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <path
+                                d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72">
+                            </path>
+                            <path d="m14 7 3 3"></path>
+                            <path d="M5 6v4"></path>
+                            <path d="M19 14v4"></path>
+                            <path d="M10 2v2"></path>
+                            <path d="M7 8H3"></path>
+                            <path d="M21 16h-4"></path>
+                            <path d="M11 3H9"></path>
+                        </svg>
+                    </div>
+                    <span class="logo-text">Gemini Watermark <span>Remover</span></span>
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link active">Home</a></li>
+                    <li><a href="#studio" class="nav-link" id="nav-gemini-video">Video Cleaner</a></li>
+                    <li><a href="#pricing-tag" class="nav-link">Pricing</a></li>
+                    <li><a href="#faq-tag" class="nav-link">Updates</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div class="user-avatar" id="mock-avatar"></div>
+                    <button class="btn btn-primary" id="login-btn">Login</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero section -->
+        <section class="hero-section">
+            <div class="section-container">
+                <div class="hero-content">
+                    <span class="kicker">Browser Video Tool</span>
+                    <h1 class="hero-title text-gradient">Gemini Omni Video Watermark Remover</h1>
+                    <p class="hero-description">
+                        Use this AI-powered pixel unblending tool to clean the visible corner logo from supported Gemini
+                        Omni videos. Processing happens 100% locally in your browser—no files ever leave
+                        your device.
+                    </p>
+                    <div class="alert-info">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+                            <path d="m9 10 2 2 4-4"></path>
+                            <path d="M12 17v4"></path>
+                            <path d="M8 21h8"></path>
+                        </svg>
+                        <span>Note: We support standard resolutions: 1280x720, 720x1280, 1920x1080 (experimental), and
+                            1080x1920 (experimental). Other aspect ratios are rejected to guarantee watermark template
+                            matches.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Workspace (Studio) -->
+        <section class="section-container" id="studio">
+            <div class="glass-card workspace-card">
+                <!-- Header banner inside card -->
+                <div class="workspace-header">
+                    <div class="workspace-title-box">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                            <path d="M7 3v18"></path>
+                            <path d="M3 7.5h4"></path>
+                            <path d="M3 12h18"></path>
+                            <path d="M3 16.5h4"></path>
+                            <path d="M17 3v18"></path>
+                            <path d="M17 7.5h4"></path>
+                            <path d="M17 16.5h4"></path>
+                        </svg>
+                        <span>Gemini Omni Video Cleaner | Gemini Video Watermark Remover</span>
+                    </div>
+                    <div class="credit-badge" id="premium-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+                            <path d="M12 9v4"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                        <span id="credit-badge-text">Free mode: 3/3 daily videos left</span>
+                    </div>
+                </div>
+
+                <!-- Main Studio Workspace Tab Selector -->
+                <div class="studio-selector-tabs">
+                    <button class="studio-tab-btn active" id="tab-video-cleaner">
+                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="20" height="15" x="2" y="3" rx="2"></rect>
+                            <path d="m10 11 5 3-5 3v-6Z"></path>
+                        </svg>
+                        <span>Video Watermark Remover</span>
+                    </button>
+                    <button class="studio-tab-btn" id="tab-image-cleaner">
+                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                            <circle cx="9" cy="9" r="2"></circle>
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                        </svg>
+                        <span>Image Watermark Remover</span>
+                    </button>
+                </div>
+
+                <!-- Video processing container -->
+                <div id="video-studio-panel">
+                    <div class="dashboard-grid">
+                        <!-- Left: Interactive workspace area -->
+                        <div class="viewer-panel" id="viewer-panel">
+
+                            <!-- Dropzone (shown by default) -->
+                            <div class="dropzone" id="dropzone">
+                                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <h3 class="dropzone-title">Upload a 1280x720, 720x1280, 1920x1080, or 1080x1920 video</h3>
+                                <p class="dropzone-subtitle">Landscape and portrait orientation supported. Drag & drop or
+                                    click to upload</p>
+                            </div>
+                            <input type="file" id="file-input" accept="video/*" style="display: none;">
+    
+                            <!-- Active video viewer container (hidden initially) -->
+                            <div class="preview-grid" id="preview-grid" style="display: none;">
+                                <div class="video-container">
+                                    <div class="video-label">Original Video</div>
+                                    <video class="video-frame" id="src-video" controls playsinline></video>
+                                </div>
+                                <div class="video-container" id="dest-video-container" style="display: none;">
+                                    <div class="video-label success">Cleaned Output Preview</div>
+                                    <video class="video-frame" id="dest-video" controls playsinline></video>
+                                    <button class="zoom-btn" id="zoom-video-btn" title="Zoom/Fullscreen Preview">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Right: Workspace sidebar controls -->
+                        <div class="sidebar-panel">
+                            <!-- Active Video Info -->
+                            <div>
+                                <div class="sidebar-section-title">Video Queue</div>
+                                <div class="video-info-box">
+                                    <div class="video-name" id="queue-status-text">No video selected</div>
+                                    <div class="video-meta" id="video-dims-text"></div>
+                                </div>
+                            </div>
+    
+                            <!-- Usage credits tracker -->
+                            <div class="credits-card">
+                                <div class="credits-header">
+                                    <span>Daily Credits</span>
+                                    <span class="credits-count" id="credits-fraction">3 / 3 left</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="credits-bar" style="width: 100%;"></div>
+                                </div>
+                                <p class="credits-footer-text" id="credits-limit-desc">
+                                    Guest limit: 3/day. <a href="#" class="credits-link" id="login-credits-link">Sign in</a>
+                                    to get 6.
+                                </p>
+                            </div>
+
+                            <!-- Watermark Opacity Mode Selector -->
+                            <div class="opacity-mode-card">
+                                <div class="sidebar-section-title">Watermark Opacity</div>
+                                <div class="opacity-mode-buttons">
+                                    <button class="opacity-mode-btn active" id="opacity-auto" data-mode="auto">Auto</button>
+                                    <button class="opacity-mode-btn" id="opacity-soft" data-mode="soft">Soft</button>
+                                    <button class="opacity-mode-btn" id="opacity-normal" data-mode="normal">Normal</button>
+                                </div>
+                            </div>
+
+                            <!-- I Agree Checkbox -->
+                            <div class="agree-checkbox-card">
+                                <label class="agree-checkbox-label">
+                                    <input type="checkbox" id="agree-checkbox">
+                                    <span class="agree-checkbox-text">
+                                        <strong>I agree</strong> — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
+                                    </span>
+                                </label>
+                            </div>
+    
+                            <!-- Alerts/Status -->
+                            <div class="status-alert error" id="status-error-alert" style="display: none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="error-message-text">Error occurred</span>
+                            </div>
+                            <div class="status-alert success" id="status-success-alert" style="display: none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                <span>Ready for local processing.</span>
+                            </div>
+    
+                            <!-- Progress indicator -->
+                            <div class="progress-panel" id="progress-panel" style="display: none;">
+                                <div class="progress-info">
+                                    <span class="progress-label">
+                                        <div class="spinner"></div>
+                                        <span id="process-stage-text">Processing</span>
+                                    </span>
+                                    <span id="process-percentage-text">0%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="process-bar" style="width: 0%;"></div>
+                                </div>
+                            </div>
+    
+                            <!-- File queue items list (renders if files exist) -->
+                            <div class="queue-container" id="queue-container" style="display: none;">
+                                <!-- Dynamically loaded queue elements -->
+                            </div>
+    
+                            <!-- Action controls -->
+                            <div class="action-group">
+                                <button class="btn btn-outline" id="choose-video-btn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <span id="choose-btn-text">Choose Video</span>
+                                </button>
+                                <button class="btn btn-primary" id="process-video-btn" disabled>
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        <path d="m9 12 2 2 4-4"></path>
+                                    </svg>
+                                    <span>Remove From Selected</span>
+                                </button>
+                                <button class="btn btn-secondary" id="download-video-btn" style="display: none;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    <span>Download MP4</span>
+                                </button>
+                                <button class="btn btn-outline" id="clear-queue-btn" style="display: none;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M3 6h18"></path>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                    </svg>
+                                    <span>Clear Queue</span>
+                                </button>
+                            </div>
+    
+                            <!-- Premium Upgrade -->
+                            <div class="premium-card" id="premium-card">
+                                <div class="premium-title">👑 Gemini Video Watermark Remover Premium</div>
+                                <p class="premium-desc">Process multiple videos simultaneously and download all results in a
+                                    single ZIP.</p>
+                                <button class="btn btn-premium" id="upgrade-btn">Upgrade to Premium</button>
+                            </div>
+                            <p class="credits-footer-text" style="text-align: center;">
+                                Processing happens on your device. Export uses H.264 MP4. Paid yearly accounts can queue up
+                                to 10 Gemini Omni videos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image processing container -->
+                <div id="image-studio-panel" style="display: none;">
+                    <div class="dashboard-grid">
+                        <!-- Left: Interactive workspace area -->
+                        <div class="viewer-panel" id="image-viewer-panel">
+                            <!-- Image sub-tabs -->
+                            <div class="image-subtabs">
+                                <button class="subtab-btn active" id="img-subtab-auto">Gemini Cleaner</button>
+                                <button class="subtab-btn" id="img-subtab-manual">Manual Cleanup</button>
+                            </div>
+                            
+                            <!-- Image dropzone (shown by default) -->
+                            <div class="dropzone" id="image-dropzone">
+                                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="9" r="2"></circle>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                </svg>
+                                <h3 class="dropzone-title">Upload a Gemini image to remove watermark</h3>
+                                <p class="dropzone-subtitle">Supports PNG, JPG, WebP. Drag & drop or click to upload</p>
+                            </div>
+                            <input type="file" id="image-file-input" accept="image/*" style="display: none;">
+
+                            <!-- Active image editor (hidden initially) -->
+                            <div class="image-editor-workspace" id="image-editor-workspace" style="display: none;">
+                                <div class="canvas-layers-wrapper" id="canvas-layers-wrapper">
+                                    <canvas id="image-canvas"></canvas>
+                                    <canvas id="image-mask-canvas" style="display: none;"></canvas>
+                                    <div class="brush-cursor" id="brush-cursor" style="display: none;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Workspace sidebar controls -->
+                        <div class="sidebar-panel">
+                            <!-- Active Image Info -->
+                            <div>
+                                <div class="sidebar-section-title">Image Details</div>
+                                <div class="video-info-box">
+                                    <div class="video-name" id="image-name-text">No image selected</div>
+                                    <div class="video-meta" id="image-dims-text"></div>
+                                </div>
+                            </div>
+
+                            <!-- Brush settings (Manual Cleanup tab only, hidden by default) -->
+                            <div class="brush-settings-card" id="brush-settings-card" style="display: none;">
+                                <div class="sidebar-section-title">Brush Controls</div>
+                                <div class="brush-control-row">
+                                    <label for="brush-size-slider">Brush Size: <span id="brush-size-val">20px</span></label>
+                                    <input type="range" id="brush-size-slider" min="5" max="80" value="20" class="premium-slider">
+                                </div>
+                                <div class="brush-actions-row">
+                                    <button class="btn btn-outline btn-sm" id="btn-undo-draw">
+                                        <span>Undo Stroke</span>
+                                    </button>
+                                    <button class="btn btn-outline btn-sm" id="btn-clear-mask">
+                                        <span>Clear Mask</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Status message -->
+                            <div class="status-alert success" id="image-success-alert" style="display: none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                <span id="image-status-text">Image loaded successfully.</span>
+                            </div>
+
+                            <div class="status-alert error" id="image-error-alert" style="display: none;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                                <span id="image-error-msg">Error occurred</span>
+                            </div>
+
+                            <!-- Watermark Opacity Mode Selector (Image) -->
+                            <div class="opacity-mode-card">
+                                <div class="sidebar-section-title">Watermark Opacity</div>
+                                <div class="opacity-mode-buttons">
+                                    <button class="opacity-mode-btn active" id="img-opacity-auto" data-mode="auto">Auto</button>
+                                    <button class="opacity-mode-btn" id="img-opacity-soft" data-mode="soft">Soft</button>
+                                    <button class="opacity-mode-btn" id="img-opacity-normal" data-mode="normal">Normal</button>
+                                </div>
+                            </div>
+
+                            <!-- I Agree Checkbox (Image) -->
+                            <div class="agree-checkbox-card">
+                                <label class="agree-checkbox-label">
+                                    <input type="checkbox" id="img-agree-checkbox">
+                                    <span class="agree-checkbox-text">
+                                        <strong>I agree</strong> — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Image processing progress -->
+                            <div class="progress-panel" id="image-progress-panel" style="display: none;">
+                                <div class="progress-info">
+                                    <span class="progress-label">
+                                        <div class="spinner"></div>
+                                        <span>Cleaning Watermark...</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action controls -->
+                            <div class="action-group">
+                                <button class="btn btn-outline" id="choose-image-btn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <span>Choose Image</span>
+                                </button>
+                                <button class="btn btn-primary" id="process-image-btn" disabled>
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        <path d="m9 12 2 2 4-4"></path>
+                                    </svg>
+                                    <span id="process-image-btn-text">Remove Watermark</span>
+                                </button>
+                                <button class="btn btn-secondary" id="download-image-btn" style="display: none;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    <span>Download Image</span>
+                                </button>
+                                <button class="btn btn-outline" id="clear-image-btn" style="display: none;">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M3 6h18"></path>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                    </svg>
+                                    <span>Clear Image</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features section -->
+        <section class="features-section">
+            <div class="section-container">
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="glass-card feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                            <path d="M7 3v18"></path>
+                            <path d="M3 7.5h4"></path>
+                            <path d="M3 12h18"></path>
+                            <path d="M3 16.5h4"></path>
+                            <path d="M17 3v18"></path>
+                            <path d="M17 7.5h4"></path>
+                            <path d="M17 16.5h4"></path>
+                        </svg>
+                        <h3>Built for supported Gemini videos</h3>
+                        <p>The visible-logo cleanup is calibrated specifically for 720p and 1080p (landscape & portrait)
+                            video frames from Gemini Omni models.</p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="glass-card feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <h3>Private browser workflow</h3>
+                        <p>Your selected video stays fully local on your device while the browser decodes, cleans, and
+                            encodes the MP4 container.</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="glass-card feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+                            <path d="m9 10 2 2 4-4"></path>
+                            <path d="M12 17v4"></path>
+                            <path d="M8 21h8"></path>
+                        </svg>
+                        <h3>Visible logo cleanup only</h3>
+                        <p>The tool targets the visible corner logo to restore background details, without modifying
+                            invisible watermarking metadata or provenance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Demo Section -->
+        <section class="demo-section">
+            <div class="section-container">
+                <div class="demo-box">
+                    <div class="demo-title-container">
+                        <span class="kicker">Video Demonstration</span>
+                        <h2 class="text-gradient">How to use Gemini Omni Video Watermark Remover</h2>
+                        <p class="hero-description" style="margin-top: 1rem; margin-left: 0;">
+                            Watch our quick demo showcasing the frame-by-frame logo cleanup, local processing
+                            capabilities, and instant high-quality MP4 downloads.
+                        </p>
+                        <ol class="steps-list" style="margin-top: 2rem;">
+                            <li class="step-item">
+                                <span class="step-num">01</span>
+                                <div>Choose a supported 720p or 1080p Gemini video from your device.</div>
+                            </li>
+                            <li class="step-item">
+                                <span class="step-num">02</span>
+                                <div>Run the Gemini video logo remover and keep this tab open while local processing
+                                    finishes.</div>
+                            </li>
+                            <li class="step-item">
+                                <span class="step-num">03</span>
+                                <div>Download the cleaned MP4 file and review the visible corner area before using the
+                                    result.</div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Interactive Mock Youtube Card -->
+                    <div class="video-demo-card" id="demo-video-wrapper">
+                        <img src="https://img.youtube.com/vi/8x5TfVX214I/maxresdefault.jpg"
+                            alt="Gemini Omni Video Watermark Remover Demo" class="video-demo-thumb">
+                        <div class="video-demo-overlay">
+                            <div class="play-button">
+                                <svg class="play-icon-svg" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"></path>
+                                </svg>
+                                <div class="play-ripple"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Format presets support list -->
+        <section class="features-section" style="padding-bottom: 3rem;">
+            <div class="section-container">
+                <div class="formats-section">
+                    <div>
+                        <span class="kicker">Supported Video Formats</span>
+                        <h2 class="text-gradient">What the current beta supports</h2>
+                        <p class="hero-description" style="margin-top: 1rem; margin-left: 0;">
+                            The Gemini video watermark remover accepts common browser-readable video uploads, checks the
+                            decoded frame dimensions, and exports a cleaned MP4 when your browser supports local MP4
+                            recording.
+                        </p>
+                    </div>
+                    <div class="format-list">
+                        <div class="format-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>1280 x 720 & 1920 x 1080 landscape Gemini videos</span>
+                        </div>
+                        <div class="format-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>720 x 1280 & 1080 x 1920 portrait Gemini videos</span>
+                        </div>
+                        <div class="format-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Visible corner Gemini logo cleanup</span>
+                        </div>
+                        <div class="format-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Local browser processing with output preview</span>
+                        </div>
+                        <div class="format-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>MP4 download in supported browsers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQs Accordions -->
+        <section class="faq-section" id="faq-tag">
+            <div class="section-container">
+                <h2 class="faq-title text-gradient text-center">Gemini Video Logo Remover Questions</h2>
+                <div class="faq-grid">
+                    <!-- Q1 -->
+                    <div class="glass-card faq-card">
+                        <div class="faq-question">What video dimensions does this Gemini Video Watermark Remover
+                            support?</div>
+                        <p class="faq-answer">This tool supports exact 1280 x 720, 720 x 1280, 1920 x 1080, and 1080 x
+                            1920 videos. Note that 1080p support is experimental, and there might be minor watermark
+                            removal issues on some clips.</p>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="glass-card faq-card">
+                        <div class="faq-question">Does the Gemini Logo Remover from Video upload my file?</div>
+                        <p class="faq-answer">No. The video is processed locally in your browser. The page does not send
+                            your selected video to a server.</p>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="glass-card faq-card">
+                        <div class="faq-question">What format does the cleaned video use?</div>
+                        <p class="faq-answer">The cleaned download uses H.264 encoded MP4. A recent browser with local
+                            WebCodecs and MP4 recording support is required.</p>
+                    </div>
+                    <!-- Q4 -->
+                    <div class="glass-card faq-card">
+                        <div class="faq-question">Does this remove invisible watermarking or provenance data?</div>
+                        <p class="faq-answer">No. This tool targets the visible corner logo only. It does not remove
+                            invisible watermarking, metadata, or provenance signals.</p>
+                    </div>
+                    <!-- Q5 -->
+                    <div class="glass-card faq-card">
+                        <div class="faq-question">Can I use this Gemini Video Watermark Remover online for free?</div>
+                        <p class="faq-answer">Yes. The supported single-video workflow runs in your browser for free.
+                            Batch processing and simultaneous queue conversions are available with the Premium upgrade.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="section-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo-container">
+                        <div class="logo-icon">
+                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor">
+                                <path
+                                    d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72">
+                                </path>
+                                <path d="m14 7 3 3"></path>
+                                <path d="M5 6v4"></path>
+                                <path d="M19 14v4"></path>
+                                <path d="M10 2v2"></path>
+                                <path d="M7 8H3"></path>
+                                <path d="M21 16h-4"></path>
+                                <path d="M11 3H9"></path>
+                            </svg>
+                        </div>
+                        <span class="logo-text">Gemini Watermark <span>Remover</span></span>
+                    </a>
+                    <p>A simple, privacy-first Gemini watermark remover and logo cleaner that works entirely in your
+                        browser. No server uploads. No signup. No clutter.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Tool</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Watermark Remover</a></li>
+                        <li><a href="#studio" class="footer-link">Video Remover</a></li>
+                        <li><a href="#pricing-tag" class="footer-link">Pricing</a></li>
+                        <li><a href="#faq-tag" class="footer-link">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">About</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                        <li><a href="#" class="footer-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Privacy</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="#" class="footer-link">Terms of Service</a></li>
+                        <li>
+                            <div class="badge-pill">Local Access Only</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright-box">
+                    <a href="https://toolfame.com/item/gemini-watermark-remove" target="_blank"
+                        rel="noopener noreferrer" class="toolfame-badge">
+                        <img src="https://toolfame.com/badge-dark.svg" alt="Featured on toolfame.com"
+                            class="toolfame-img">
+                    </a>
+                    <p class="copyright-text">© 2026 Gemini Watermark Remover. All rights reserved.</p>
+                    <p class="copyright-text">Private browser-based image/video cleaning.</p>
+                </div>
+                <div class="disclaimer-text">
+                    Disclaimer: This product is an independent educational tool. It is not affiliated with, sponsored
+                    by, or associated with Google or Gemini.
+                </div>
+                <div class="footer-bottom-actions">
+                    <p>Private & Simple</p>
+                    <div class="footer-divider"></div>
+                    <button class="btn btn-outline" id="contact-btn">Contact Us</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Zoom Fullscreen Modal -->
+    <div class="zoom-modal" id="zoom-modal" style="display: none;">
+        <div class="zoom-modal-backdrop" id="zoom-modal-backdrop"></div>
+        <div class="zoom-modal-content">
+            <button class="zoom-modal-close" id="zoom-modal-close" title="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="zoom-video-wrapper">
+                <video id="zoom-video" controls autoplay playsinline></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application Script -->
+    <script type="module" src="app.js?v=5"></script>
+</body>
+
+</html>

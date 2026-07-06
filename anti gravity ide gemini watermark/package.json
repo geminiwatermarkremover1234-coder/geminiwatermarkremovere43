@@ -1,0 +1,18 @@
+{
+  "name": "gemini-video-watermark-remover-clone",
+  "version": "1.0.0",
+  "description": "Fully client-side browser application to remove visible corner watermark logos from Gemini Omni/Veo videos using WebCodecs.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000 -c-1"
+  },
+  "keywords": [
+    "gemini",
+    "watermark",
+    "remover",
+    "webcodecs",
+    "mp4box"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}
