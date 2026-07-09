@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "code-review-graph": {
+      "command": "uv",
+      "args": [
+        "run",
+        "code-review-graph",
+        "serve"
+      ],
+      "cwd": "E:\\anti gravit 2.0 gemini remoev backup",
+      "type": "stdio"
+    }
+  }
+}

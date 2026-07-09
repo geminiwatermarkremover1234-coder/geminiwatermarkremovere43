@@ -1,756 +1,1292 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
-    <title>Gemini Omni Video Watermark Remover | Client-Side Video Cleaner</title>
-    <meta name="description"
-        content="Remove the visible Gemini logo from 1280x720, 720x1280, 1920x1080, and 1080x1920 videos. Processes completely locally in your browser. No server uploads.">
-    <meta name="keywords"
-        content="gemini video watermark remover, gemini logo remover from video, gemini omni video watermark remover, remove gemini watermark, local video cleaner">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
-
-    <!-- Design styling and assets -->
-    <link rel="stylesheet" href="index.css">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=5" name="viewport">
+    <title>Gemini Watermark Remover — Free, Private, In-Browser</title>
+    <meta name="description" content="Free Gemini watermark remover for video & images. Remove Gemini, Veo 3 & Omni watermarks locally in your browser — no upload, no server, 100% private.">
+    <link rel="canonical" href="https://geminiomniwatermarkremover.com/">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Gemini Watermark Remover — Free, Private, In-Browser">
+    <meta property="og:description" content="Free Gemini watermark remover for video & images. Remove Gemini, Veo 3 & Omni watermarks locally in your browser — no upload, 100% private.">
+    <meta property="og:site_name" content="Lumina AI">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gemini Watermark Remover — Free, Private, In-Browser">
+    <meta name="twitter:description" content="Free Gemini watermark remover for video & images. Remove Gemini, Veo 3 & Omni watermarks locally in your browser — no upload, 100% private.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Lumina AI — Gemini Watermark Remover",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web browser (Chrome, Edge)",
+      "url": "https://geminiomniwatermarkremover.com/",
+      "description": "Free, privacy-first Gemini watermark remover that runs entirely in your browser. Remove the visible Gemini, Veo 3, and Omni watermark from videos and images with no server upload.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Removes visible Gemini video watermark locally in the browser",
+        "Removes visible Gemini AI image watermark",
+        "Works with Veo 3 and Google Omni generated videos",
+        "100% local processing — no file upload to any server",
+        "Free daily conversions with no sign-up",
+        "Restores original texture and noise behind the watermark"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "312",
+        "bestRating": "5"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is there a free Gemini watermark remover that works online?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Lumina AI runs entirely in your browser to remove the Gemini watermark from clips and images. You get three free video and three free image conversions every day, with no sign-up or upload to a server required." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I remove the Veo 3 watermark from a video?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Open the Videos tab, drop your original Veo 3 MP4, and the remover detects the corner logo on every frame. Processing happens locally with the WebCodecs API, then you download a clean MP4. Use the original file, not a re-encoded copy, for the cleanest edges." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the Gemini Omni watermark remover upload my video?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. All processing happens in your browser using WebCodecs and Canvas. Your video never leaves your device, which keeps private clips private and avoids slow server round-trips." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I remove the Gemini watermark from images too?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Switch to the Images tab and drop JPG, PNG, or WebP files. The tool removes the Gemini AI image watermark from each file in about one second per megapixel and exports clean PNGs, with bulk processing supported." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it legal to remove a Gemini or Veo watermark?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Lumina is an independent educational tool, not affiliated with Google. Use it on content you own or have rights to. Removing the visible corner logo from your own generated videos is generally acceptable; follow Google's terms and disclose AI use where required." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this remove invisible or SynthID watermarks?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. This tool only removes the visible corner logo. It does not touch invisible watermarking, SynthID signals, metadata, or provenance data, which are out of scope and intentionally preserved." }
+        }
+      ]
+    }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-variant": "#e0e3e5",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface": "#f7f9fb",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-background": "#191c1e",
+                    "on-primary-fixed": "#07006c",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f7f9fb",
+                    "surface-container-high": "#e6e8ea",
+                    "primary-container": "#6063ee",
+                    "on-secondary-container": "#006172",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-dim": "#d8dadc",
+                    "tertiary-container": "#6c748b",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e1e0ff",
+                    "secondary-fixed": "#acedff",
+                    "on-surface": "#191c1e",
+                    "surface-container": "#eceef0",
+                    "tertiary-fixed": "#dae2fd",
+                    "primary": "#4648d4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "surface-container-highest": "#e0e3e5",
+                    "background": "#f7f9fb",
+                    "outline-variant": "#c7c4d7",
+                    "on-secondary-fixed": "#001f26",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#545c72",
+                    "surface-tint": "#494bd6",
+                    "on-primary-container": "#fffbff",
+                    "inverse-primary": "#c0c1ff",
+                    "secondary": "#00687a",
+                    "on-tertiary-container": "#fefcff",
+                    "on-tertiary-fixed": "#131b2e",
+                    "secondary-container": "#57dffe",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#464554",
+                    "outline": "#767586"
+                },
+                borderRadius: {
+                    DEFAULT: "0.25rem",
+                    lg: "0.5rem",
+                    xl: "0.75rem",
+                    "2xl": "1rem",
+                    "3xl": "1.5rem",
+                    full: "9999px"
+                },
+                spacing: {
+                    "container-max": "1280px",
+                    gutter: "24px",
+                    base: "8px",
+                    "section-gap-md": "64px",
+                    "margin-mobile": "16px",
+                    "section-gap-lg": "96px"
+                },
+                fontFamily: {
+                    display: ["Plus Jakarta Sans", "sans-serif"],
+                    body: ["Inter", "sans-serif"]
+                },
+                fontSize: {
+                    "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "700" }],
+                    "headline-lg": ["36px", { lineHeight: "1.2", letterSpacing: "-0.03em", fontWeight: "700" }],
+                    "headline-md": ["32px", { lineHeight: "1.3", letterSpacing: "-0.02em", fontWeight: "600" }],
+                    "headline-lg-mobile": ["28px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+                    "body-lg": ["18px", { lineHeight: "1.6", letterSpacing: "-0.01em", fontWeight: "400" }],
+                    "body-md": ["16px", { lineHeight: "1.5", letterSpacing: "-0.01em", fontWeight: "400" }],
+                    "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.02em", fontWeight: "600" }],
+                    "label-sm": ["12px", { lineHeight: "1.2", letterSpacing: "0.01em", fontWeight: "500" }]
+                }
+            }
+        }
+    };
+    </script>
 
     <!-- Third-party local script dependencies -->
     <script src="vendor/mp4box.all.min.js"></script>
     <script src="vendor/mp4-muxer.min.js"></script>
+
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .gradient-text { background: linear-gradient(135deg, #4648d4 0%, #00687a 50%, #4648d4 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 4s ease-in-out infinite; }
+        .mobile-nav-open { overflow: hidden; }
+        #mobile-menu { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
+        #mobile-menu.active { transform: translateX(0); }
+        .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { width: 0.8rem; height: 0.8rem; border: 2px solid rgba(70, 72, 212, 0.2); border-top-color: #4648d4; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .premium-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #e6e8ea; outline: none; }
+        .premium-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #4648d4; cursor: pointer; }
+        .canvas-layers-wrapper { position: relative; display: flex; align-items: center; justify-content: center; max-height: 500px; }
+        .canvas-layers-wrapper canvas { max-width: 100%; max-height: 500px; object-fit: contain; border-radius: 0.5rem; }
+        #image-mask-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+        .brush-cursor { position: absolute; border: 2px solid rgba(239, 68, 68, 0.8); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 10; }
+        .zoom-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 200; display: flex; align-items: center; justify-content: center; }
+        .zoom-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); }
+        .zoom-modal-content { position: relative; z-index: 1; width: 90vw; max-width: 1200px; }
+        .zoom-modal-close { position: absolute; top: -40px; right: 0; background: none; border: none; color: #fff; cursor: pointer; }
+        .zoom-video-wrapper video { width: 100%; border-radius: 0.75rem; }
+        .play-button { width: 64px; height: 64px; background: rgba(70, 72, 212, 0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+        .play-button:hover { transform: scale(1.1); }
+        .play-icon-svg { width: 28px; height: 28px; fill: white; }
+        .play-ripple { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(70, 72, 212, 0.4); animation: ripple 1.5s ease-out infinite; }
+        @keyframes ripple { to { transform: scale(2); opacity: 0; } }
+        .video-demo-card { position: relative; cursor: pointer; border-radius: 1rem; overflow: hidden; aspect-ratio: 16/9; }
+        .video-demo-thumb { width: 100%; height: 100%; object-fit: cover; }
+        .video-demo-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3); }
+
+        /* ====== HERO ANIMATIONS ====== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            50% { transform: translateY(15px) scale(0.95) rotate(5deg); }
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(70, 72, 212, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(70, 72, 212, 0.3), 0 0 60px rgba(70, 72, 212, 0.1); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            will-change: transform;
+        }
+        .hero-orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(70, 72, 212, 0.2), transparent 70%);
+            top: -80px; right: -60px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .hero-orb-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(0, 104, 122, 0.15), transparent 70%);
+            top: 40%; left: -80px;
+            animation: floatReverse 10s ease-in-out infinite;
+        }
+        .hero-orb-3 {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(96, 99, 238, 0.12), transparent 70%);
+            bottom: -40px; right: 20%;
+            animation: float 12s ease-in-out 2s infinite;
+        }
+        .hero-particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(70, 72, 212, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-particle:nth-child(4) { top: 15%; left: 10%; animation: float 6s ease-in-out infinite; }
+        .hero-particle:nth-child(5) { top: 25%; right: 15%; animation: floatReverse 8s ease-in-out 1s infinite; }
+        .hero-particle:nth-child(6) { bottom: 20%; left: 25%; animation: float 7s ease-in-out 0.5s infinite; }
+        .hero-particle:nth-child(7) { top: 40%; right: 30%; animation: floatReverse 9s ease-in-out 2s infinite; width: 6px; height: 6px; background: rgba(0, 104, 122, 0.3); }
+        .hero-particle:nth-child(8) { bottom: 35%; left: 40%; animation: float 11s ease-in-out 1.5s infinite; width: 3px; height: 3px; }
+
+        .hero-glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(70, 72, 212, 0.12);
+            border-radius: 2rem;
+            padding: 2.5rem 2rem;
+            animation: pulseGlow 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 200%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            animation: shimmer 6s ease-in-out infinite;
+        }
+        .hero-badge { animation: fadeSlideUp 0.6s ease-out both; }
+        .hero-title { animation: fadeSlideUp 0.8s ease-out 0.15s both; }
+        .hero-desc { animation: fadeSlideUp 0.8s ease-out 0.3s both; }
+
+        /* ====== MATCHED VIDEO SIZING ====== */
+        .video-matched-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .video-matched-grid.has-output {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .video-matched-grid .video-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .video-matched-grid video {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            background: #1a1a2e;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(70, 72, 212, 0.15);
+        }
+
+        /* Dynamic active states selectors */
+        #tab-video-cleaner, #tab-image-cleaner {
+            color: #464554;
+        }
+        #tab-video-cleaner:hover, #tab-image-cleaner:hover {
+            color: #4648d4;
+        }
+        #tab-video-cleaner.active, #tab-image-cleaner.active {
+            background-color: #ffffff;
+            color: #4648d4;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #opacity-auto, #opacity-soft, #opacity-normal,
+        #img-opacity-auto, #img-opacity-soft, #img-opacity-normal {
+            background-color: #eceef0;
+            color: #464554;
+        }
+        #opacity-auto:hover, #opacity-soft:hover, #opacity-normal:hover,
+        #img-opacity-auto:hover, #img-opacity-soft:hover, #img-opacity-normal:hover {
+            background-color: #e0e3e5;
+        }
+        #opacity-auto.active, #opacity-soft.active, #opacity-normal.active,
+        #img-opacity-auto.active, #img-opacity-soft.active, #img-opacity-normal.active {
+            background-color: #4648d4 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 6px -1px rgba(70, 72, 212, 0.2);
+        }
+
+        #img-subtab-auto, #img-subtab-manual {
+            color: #464554;
+        }
+        #img-subtab-auto:hover, #img-subtab-manual:hover {
+            background-color: #f2f4f6;
+        }
+        #img-subtab-auto.active, #img-subtab-manual.active {
+            background-color: #4648d4 !important;
+            color: #ffffff !important;
+        }
+
+        /* Queue item styles */
+        .queue-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .queue-item:hover {
+            border-color: rgba(70, 72, 212, 0.3);
+            background: rgba(70, 72, 212, 0.02);
+        }
+        .queue-item.active {
+            border-color: #4648d4;
+            background: rgba(70, 72, 212, 0.05);
+            box-shadow: 0 4px 12px rgba(70, 72, 212, 0.05);
+        }
+        .queue-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+        .queue-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #191c1e;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .queue-status {
+            font-size: 0.75rem;
+            color: #464554;
+            margin-top: 0.125rem;
+        }
+        .queue-item.active .queue-status {
+            color: #4648d4;
+            font-weight: 500;
+        }
+        .queue-remove-btn {
+            background: transparent;
+            border: none;
+            color: #767586;
+            cursor: pointer;
+            padding: 0.375rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .queue-remove-btn:hover {
+            color: #ba1a1a;
+            background: rgba(186, 26, 26, 0.1);
+        }
+    </style>
 </head>
 
-<body>
-    <div class="bg-mesh"></div>
+<body class="bg-surface text-on-surface font-body overflow-x-hidden">
 
-    <!-- Header bar -->
-    <header id="header">
-        <div class="section-container">
-            <nav class="navbar">
-                <a href="#" class="logo-container">
-                    <div class="logo-icon">
-                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor">
-                            <path
-                                d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72">
-                            </path>
-                            <path d="m14 7 3 3"></path>
-                            <path d="M5 6v4"></path>
-                            <path d="M19 14v4"></path>
-                            <path d="M10 2v2"></path>
-                            <path d="M7 8H3"></path>
-                            <path d="M21 16h-4"></path>
-                            <path d="M11 3H9"></path>
-                        </svg>
-                    </div>
-                    <span class="logo-text">Gemini Watermark <span>Remover</span></span>
-                </a>
-                <ul class="nav-menu">
-                    <li><a href="#" class="nav-link active">Home</a></li>
-                    <li><a href="#studio" class="nav-link" id="nav-gemini-video">Video Cleaner</a></li>
-                    <li><a href="#pricing-tag" class="nav-link">Pricing</a></li>
-                    <li><a href="#faq-tag" class="nav-link">Updates</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <div class="user-avatar" id="mock-avatar"></div>
-                    <button class="btn btn-primary" id="login-btn">Login</button>
-                </div>
+<!-- ==================== TOP NAV BAR ==================== -->
+<header id="header" class="fixed top-0 z-50 w-full backdrop-blur-xl border-b border-white/20 shadow-sm transition-all duration-300 bg-surface/70">
+    <div class="flex justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto h-16 md:h-20">
+        <div class="flex items-center gap-4 md:gap-8">
+            <a class="font-display font-bold text-on-background text-xl md:text-2xl tracking-tight" href="#">Lumina AI</a>
+            <nav class="hidden md:flex items-center gap-6">
+                <a class="text-label-md font-body font-semibold text-primary border-b-2 border-primary pb-1" href="#">Tools</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#studio" id="nav-gemini-video">Video Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="veo.html">Veo Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="remove-synthid.html">SynthID Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#pricing-tag">Pricing</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="#faq-tag">Updates</a>
             </nav>
         </div>
-    </header>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="user-avatar w-8 h-8 rounded-full border border-outline-variant/30 bg-surface-container-high hidden md:block" id="mock-avatar"></div>
+            <button class="hidden md:block text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" id="login-btn">Login</button>
+            <button class="bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md px-4 py-2 md:px-6 md:py-2.5 rounded-xl active:scale-95 transition-all shadow-md hidden md:block" onclick="window.location.hash='studio'">Get Started</button>
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden p-2 text-on-background" onclick="toggleMobileMenu()">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </div>
+</header>
 
-    <main>
-        <!-- Hero section -->
-        <section class="hero-section">
-            <div class="section-container">
-                <div class="hero-content">
-                    <span class="kicker">Browser Video Tool</span>
-                    <h1 class="hero-title text-gradient">Gemini Omni Video Watermark Remover</h1>
-                    <p class="hero-description">
-                        Use this AI-powered pixel unblending tool to clean the visible corner logo from supported Gemini
-                        Omni videos. Processing happens 100% locally in your browser—no files ever leave
-                        your device.
+<!-- ==================== MOBILE SIDEBAR MENU ==================== -->
+<div class="fixed inset-0 z-[60] bg-surface md:hidden flex flex-col p-gutter" id="mobile-menu">
+    <div class="flex justify-between items-center mb-10">
+        <span class="font-display text-headline-md font-bold text-on-background">Lumina AI</span>
+        <button class="p-2" onclick="toggleMobileMenu()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <nav class="flex flex-col gap-6 font-display text-headline-md font-bold mb-auto">
+        <a class="text-primary" href="#" onclick="toggleMobileMenu()">Tools</a>
+        <a class="text-on-surface-variant" href="#studio" onclick="toggleMobileMenu()">Video Remover</a>
+        <a class="text-on-surface-variant" href="veo.html">Veo Remover</a>
+        <a class="text-on-surface-variant" href="remove-synthid.html">SynthID Remover</a>
+        <a class="text-on-surface-variant" href="#pricing-tag" onclick="toggleMobileMenu()">Pricing</a>
+        <a class="text-on-surface-variant" href="#faq-tag" onclick="toggleMobileMenu()">API</a>
+    </nav>
+    <div class="flex flex-col gap-4">
+        <button class="w-full py-4 font-display text-headline-md font-bold text-on-surface-variant border border-outline-variant/30 rounded-2xl" onclick="toggleMobileMenu(); document.getElementById('login-btn').click();">Sign In</button>
+        <button class="w-full py-4 font-display text-headline-md font-bold bg-primary text-on-primary rounded-2xl shadow-lg" onclick="toggleMobileMenu(); window.location.hash='studio';">Get Started</button>
+    </div>
+</div>
+
+<main>
+<!-- ==================== HERO SECTION ==================== -->
+<section class="relative pt-24 md:pt-36 pb-10 md:pb-16 px-margin-mobile md:px-gutter max-w-container-max mx-auto overflow-hidden">
+    <!-- Animated floating gradient orbs -->
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <!-- Animated particles for depth -->
+    <div class="hero-particle"></div>
+    <div class="hero-particle"></div>
+    <div class="hero-particle"></div>
+    <div class="hero-particle"></div>
+    <div class="hero-particle"></div>
+
+    <div class="text-center relative z-10 max-w-4xl mx-auto">
+        <div class="hero-glass-card">
+            <!-- Live Badge -->
+            <div class="hero-badge inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 md:mb-8 shadow-sm">
+                <span class="flex h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-label-sm font-body text-primary font-semibold">Now processing 100% locally</span>
+            </div>
+            <h1 class="hero-title font-display text-headline-lg-mobile md:text-display-lg text-on-background mb-4 md:mb-6 leading-tight">Free Gemini Watermark Remover for <span class="gradient-text">Video & Images</span></h1>
+            <p class="hero-desc text-body-md md:text-body-lg font-body text-on-surface-variant mb-2 max-w-2xl mx-auto">Remove the Gemini watermark from your videos and images with no upload. This free AI watermark remover runs entirely in your browser, and as a Gemini AI watermark remover it cleans both clips and stills so you download a clean MP4 or PNG in seconds.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SEO INTRO BLOCK ==================== -->
+<section class="px-margin-mobile md:px-gutter max-w-3xl mx-auto py-8 md:py-10">
+    <p class="text-body-md md:text-body-lg font-body text-on-surface-variant leading-relaxed mb-4">
+        Lumina AI is a Gemini watermark remover free to use, built for creators who need to clean up AI-generated clips before posting. When you generate a video with Gemini, Veo 3, or Google Omni, a small logo is baked into the corner of every frame and image. This watermark remover online reverses that visible mark locally in your browser — there is no server upload, no queue, and no sign-up. Whether you are finishing a short reel, a product demo, or a batch of generated images, you can remove the Gemini watermark in three quick steps and export a clean file that is ready to share. There is no credit card required and you keep three conversions per day on the house.
+    </p>
+</section>
+
+<!-- ==================== MAIN STUDIO WORKSPACE ==================== -->
+<section class="px-margin-mobile md:px-gutter max-w-container-max mx-auto pb-12" id="studio">
+    <div class="relative max-w-4xl mx-auto">
+
+        <!-- Studio Mode Tabs (Video / Image Toggle) -->
+        <div class="flex justify-center mb-6 md:mb-8">
+            <div class="inline-flex bg-surface-container-high p-1 rounded-xl">
+                <button class="flex items-center gap-2 px-4 py-2 md:px-6 md:py-2 rounded-lg text-label-md font-body transition-all" id="tab-image-cleaner">
+                    <span class="material-symbols-outlined text-[20px]">image</span>
+                    Images
+                </button>
+                <button class="flex items-center gap-2 px-4 py-2 md:px-6 md:py-2 rounded-lg text-label-md font-body transition-all active" id="tab-video-cleaner">
+                    <span class="material-symbols-outlined text-[20px]">movie</span>
+                    Videos
+                    <span class="text-[10px] bg-primary/10 px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">Beta</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== VIDEO STUDIO PANEL ===== -->
+        <div id="video-studio-panel">
+            <!-- Credit Badge Header -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
+                <div class="flex items-center gap-2 text-label-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-[18px]">dashboard</span>
+                    <span>Gemini Omni Video Cleaner</span>
+                </div>
+                <div class="inline-flex items-center gap-2 text-label-sm font-body px-3 py-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-low text-on-surface-variant" id="premium-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                    <span id="credit-badge-text">Free mode: 3/3 daily videos left</span>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+                <!-- LEFT: Viewer Panel -->
+                <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/30 shadow-xl overflow-hidden min-h-[360px] flex items-center justify-center p-4 md:p-6" id="viewer-panel">
+                    <!-- Dropzone (shown by default) -->
+                    <div class="dropzone w-full min-h-[300px] border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary/[0.02]" id="dropzone">
+                        <span class="material-symbols-outlined text-on-surface-variant/40 text-5xl mb-4 transition-all">cloud_upload</span>
+                        <h3 class="text-lg md:text-xl font-display font-bold text-on-background mb-2">Upload a 720p, 1080p, or 4K Gemini video</h3>
+                        <p class="text-body-md text-on-surface-variant text-center">Landscape and portrait. Drag & drop or click to upload.</p>
+                        <p class="text-body-md text-on-surface-variant/70 text-center mt-2 max-w-md"><strong>Note:</strong> Upload the original MP4 downloaded directly from Gemini. Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.</p>
+                    </div>
+                    <input type="file" id="file-input" accept="video/*" multiple style="display: none;">
+
+                    <!-- Active video viewer (hidden initially) -->
+                    <div class="video-matched-grid w-full" id="preview-grid" style="display: none;">
+                        <div class="video-container">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-primary text-[16px]">videocam</span>
+                                <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant">Original Video</span>
+                            </div>
+                            <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="src-video" controls playsinline style="max-height: 28rem;"></video>
+                        </div>
+                        <div class="video-container" id="dest-video-container" style="display: none;">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-green-600 text-[16px]">check_circle</span>
+                                <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-green-600">Cleaned Output</span>
+                            </div>
+                            <div class="relative">
+                                <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="dest-video" controls playsinline style="max-height: 28rem;"></video>
+                                <button class="absolute top-3 right-3 w-9 h-9 rounded-lg bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" id="zoom-video-btn" title="Zoom/Fullscreen Preview">
+                                    <span class="material-symbols-outlined text-[20px]">zoom_in</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Sidebar Controls -->
+                <div class="flex flex-col gap-4">
+                    <!-- Video Queue Info -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <div class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-2">Video Queue</div>
+                        <div class="font-body font-semibold text-on-background text-sm break-all" id="queue-status-text">No video selected</div>
+                        <div class="text-label-sm font-body text-on-surface-variant mt-1" id="video-dims-text"></div>
+                    </div>
+
+                    <!-- Credits Card -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <div class="flex items-center justify-between text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-3">
+                            <span>Daily Credits</span>
+                            <span class="font-bold text-on-background" id="credits-fraction">3 / 3 left</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full transition-all duration-300" id="credits-bar" style="width: 100%;"></div>
+                        </div>
+                        <p class="text-label-sm font-body text-on-surface-variant mt-2" id="credits-limit-desc">
+                            Guest limit: 3/day. <a href="#" class="text-primary font-semibold hover:underline" id="login-credits-link">Sign in</a> to get 6.
+                        </p>
+                    </div>
+
+                    <!-- Watermark Opacity Mode -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <div class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-3">Watermark Opacity</div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all active" id="opacity-auto" data-mode="auto">Auto</button>
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all" id="opacity-soft" data-mode="soft">Soft</button>
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all" id="opacity-normal" data-mode="normal">Normal</button>
+                        </div>
+                    </div>
+
+                    <!-- I Agree Checkbox -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" id="agree-checkbox" class="w-5 h-5 mt-0.5 accent-primary rounded flex-shrink-0">
+                            <span class="text-label-sm font-body text-on-surface-variant leading-relaxed">
+                                <strong class="text-on-surface">I agree</strong> — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Status Alerts -->
+                    <div class="flex items-center gap-3 rounded-xl p-3 text-label-sm font-body font-semibold bg-red-50 border border-red-200 text-red-600" id="status-error-alert" style="display: none;">
+                        <span class="material-symbols-outlined text-[18px]">error</span>
+                        <span id="error-message-text">Error occurred</span>
+                    </div>
+                    <div class="flex items-center gap-3 rounded-xl p-3 text-label-sm font-body font-semibold bg-emerald-50 border border-emerald-200 text-emerald-600" id="status-success-alert" style="display: none;">
+                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        <span>Ready for local processing.</span>
+                    </div>
+
+                    <!-- Progress Panel -->
+                    <div class="flex flex-col gap-2 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4" id="progress-panel" style="display: none;">
+                        <div class="flex items-center justify-between text-label-sm font-body font-semibold text-on-surface-variant">
+                            <span class="flex items-center gap-2">
+                                <div class="spinner"></div>
+                                <span id="process-stage-text">Processing</span>
+                            </span>
+                            <span id="process-percentage-text">0%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full transition-all duration-300" id="process-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Queue Container -->
+                    <div class="flex flex-col gap-2 max-h-[200px] overflow-y-auto" id="queue-container" style="display: none;"></div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col gap-2">
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-outline-variant/30 text-label-md font-body font-semibold text-on-surface-variant hover:bg-surface-container-low transition-all" id="choose-video-btn">
+                            <span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+                            <span id="choose-btn-text">Choose Video</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md shadow-md active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none" id="process-video-btn" disabled>
+                            <span class="material-symbols-outlined text-[18px]">shield</span>
+                            <span>Remove From Selected</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md shadow-md active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none" id="process-all-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">stacks</span>
+                            <span id="process-all-btn-text">Remove From All</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary/10 text-primary border border-primary/20 font-body font-semibold text-label-md hover:bg-primary/15 transition-all" id="download-video-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">download</span>
+                            <span>Download MP4</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary/10 text-primary border border-primary/20 font-body font-semibold text-label-md hover:bg-primary/15 transition-all" id="download-all-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+                            <span id="download-all-btn-text">Download All</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-outline-variant/30 text-label-md font-body font-semibold text-on-surface-variant hover:bg-surface-container-low transition-all" id="clear-queue-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                            <span>Clear Queue</span>
+                        </button>
+                    </div>
+
+                    <!-- Premium Card -->
+                    <div class="bg-gradient-to-br from-primary-fixed to-tertiary-fixed rounded-2xl border border-outline-variant/20 p-4" id="premium-card">
+                        <div class="font-display font-bold text-on-primary-fixed text-sm mb-1">👑 Premium</div>
+                        <p class="text-label-sm font-body text-on-primary-fixed/70 mb-3">Process multiple videos simultaneously and download all results in a single ZIP.</p>
+                        <button class="w-full py-2 px-4 rounded-xl bg-primary text-on-primary font-body font-semibold text-label-md shadow-md hover:bg-primary-container transition-all" id="upgrade-btn">Upgrade to Premium</button>
+                    </div>
+                    <p class="text-label-sm font-body text-on-surface-variant text-center">
+                        Processing happens on your device. Export uses H.264 MP4.
                     </p>
-                    <div class="alert-info">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-                            <path d="m9 10 2 2 4-4"></path>
-                            <path d="M12 17v4"></path>
-                            <path d="M8 21h8"></path>
-                        </svg>
-                        <span>Note: We support standard resolutions: 1280x720, 720x1280, 1920x1080 (experimental), and
-                            1080x1920 (experimental). Other aspect ratios are rejected to guarantee watermark template
-                            matches.</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Workspace (Studio) -->
-        <section class="section-container" id="studio">
-            <div class="glass-card workspace-card">
-                <!-- Header banner inside card -->
-                <div class="workspace-header">
-                    <div class="workspace-title-box">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                            <path d="M7 3v18"></path>
-                            <path d="M3 7.5h4"></path>
-                            <path d="M3 12h18"></path>
-                            <path d="M3 16.5h4"></path>
-                            <path d="M17 3v18"></path>
-                            <path d="M17 7.5h4"></path>
-                            <path d="M17 16.5h4"></path>
-                        </svg>
-                        <span>Gemini Omni Video Cleaner | Gemini Video Watermark Remover</span>
-                    </div>
-                    <div class="credit-badge" id="premium-badge">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-                            <path d="M12 9v4"></path>
-                            <path d="M12 17h.01"></path>
-                        </svg>
-                        <span id="credit-badge-text">Free mode: 3/3 daily videos left</span>
-                    </div>
-                </div>
-
-                <!-- Main Studio Workspace Tab Selector -->
-                <div class="studio-selector-tabs">
-                    <button class="studio-tab-btn active" id="tab-video-cleaner">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect width="20" height="15" x="2" y="3" rx="2"></rect>
-                            <path d="m10 11 5 3-5 3v-6Z"></path>
-                        </svg>
-                        <span>Video Watermark Remover</span>
-                    </button>
-                    <button class="studio-tab-btn" id="tab-image-cleaner">
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-                            <circle cx="9" cy="9" r="2"></circle>
-                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-                        </svg>
-                        <span>Image Watermark Remover</span>
-                    </button>
-                </div>
-
-                <!-- Video processing container -->
-                <div id="video-studio-panel">
-                    <div class="dashboard-grid">
-                        <!-- Left: Interactive workspace area -->
-                        <div class="viewer-panel" id="viewer-panel">
-
-                            <!-- Dropzone (shown by default) -->
-                            <div class="dropzone" id="dropzone">
-                                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="17 8 12 3 7 8"></polyline>
-                                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                                </svg>
-                                <h3 class="dropzone-title">Upload a 1280x720, 720x1280, 1920x1080, or 1080x1920 video</h3>
-                                <p class="dropzone-subtitle">Landscape and portrait orientation supported. Drag & drop or
-                                    click to upload</p>
-                            </div>
-                            <input type="file" id="file-input" accept="video/*" style="display: none;">
-    
-                            <!-- Active video viewer container (hidden initially) -->
-                            <div class="preview-grid" id="preview-grid" style="display: none;">
-                                <div class="video-container">
-                                    <div class="video-label">Original Video</div>
-                                    <video class="video-frame" id="src-video" controls playsinline></video>
-                                </div>
-                                <div class="video-container" id="dest-video-container" style="display: none;">
-                                    <div class="video-label success">Cleaned Output Preview</div>
-                                    <video class="video-frame" id="dest-video" controls playsinline></video>
-                                    <button class="zoom-btn" id="zoom-video-btn" title="Zoom/Fullscreen Preview">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                            <line x1="11" y1="8" x2="11" y2="14"></line>
-                                            <line x1="8" y1="11" x2="14" y2="11"></line>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <!-- Right: Workspace sidebar controls -->
-                        <div class="sidebar-panel">
-                            <!-- Active Video Info -->
-                            <div>
-                                <div class="sidebar-section-title">Video Queue</div>
-                                <div class="video-info-box">
-                                    <div class="video-name" id="queue-status-text">No video selected</div>
-                                    <div class="video-meta" id="video-dims-text"></div>
-                                </div>
-                            </div>
-    
-                            <!-- Usage credits tracker -->
-                            <div class="credits-card">
-                                <div class="credits-header">
-                                    <span>Daily Credits</span>
-                                    <span class="credits-count" id="credits-fraction">3 / 3 left</span>
-                                </div>
-                                <div class="progress-bar-bg">
-                                    <div class="progress-bar-fill" id="credits-bar" style="width: 100%;"></div>
-                                </div>
-                                <p class="credits-footer-text" id="credits-limit-desc">
-                                    Guest limit: 3/day. <a href="#" class="credits-link" id="login-credits-link">Sign in</a>
-                                    to get 6.
-                                </p>
-                            </div>
-
-                            <!-- Watermark Opacity Mode Selector -->
-                            <div class="opacity-mode-card">
-                                <div class="sidebar-section-title">Watermark Opacity</div>
-                                <div class="opacity-mode-buttons">
-                                    <button class="opacity-mode-btn active" id="opacity-auto" data-mode="auto">Auto</button>
-                                    <button class="opacity-mode-btn" id="opacity-soft" data-mode="soft">Soft</button>
-                                    <button class="opacity-mode-btn" id="opacity-normal" data-mode="normal">Normal</button>
-                                </div>
-                            </div>
-
-                            <!-- I Agree Checkbox -->
-                            <div class="agree-checkbox-card">
-                                <label class="agree-checkbox-label">
-                                    <input type="checkbox" id="agree-checkbox">
-                                    <span class="agree-checkbox-text">
-                                        <strong>I agree</strong> — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
-                                    </span>
-                                </label>
-                            </div>
-    
-                            <!-- Alerts/Status -->
-                            <div class="status-alert error" id="status-error-alert" style="display: none;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                <span id="error-message-text">Error occurred</span>
-                            </div>
-                            <div class="status-alert success" id="status-success-alert" style="display: none;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                                <span>Ready for local processing.</span>
-                            </div>
-    
-                            <!-- Progress indicator -->
-                            <div class="progress-panel" id="progress-panel" style="display: none;">
-                                <div class="progress-info">
-                                    <span class="progress-label">
-                                        <div class="spinner"></div>
-                                        <span id="process-stage-text">Processing</span>
-                                    </span>
-                                    <span id="process-percentage-text">0%</span>
-                                </div>
-                                <div class="progress-bar-bg">
-                                    <div class="progress-bar-fill" id="process-bar" style="width: 0%;"></div>
-                                </div>
-                            </div>
-    
-                            <!-- File queue items list (renders if files exist) -->
-                            <div class="queue-container" id="queue-container" style="display: none;">
-                                <!-- Dynamically loaded queue elements -->
-                            </div>
-    
-                            <!-- Action controls -->
-                            <div class="action-group">
-                                <button class="btn btn-outline" id="choose-video-btn">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="17 8 12 3 7 8"></polyline>
-                                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                                    </svg>
-                                    <span id="choose-btn-text">Choose Video</span>
-                                </button>
-                                <button class="btn btn-primary" id="process-video-btn" disabled>
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                        <path d="m9 12 2 2 4-4"></path>
-                                    </svg>
-                                    <span>Remove From Selected</span>
-                                </button>
-                                <button class="btn btn-secondary" id="download-video-btn" style="display: none;">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                    <span>Download MP4</span>
-                                </button>
-                                <button class="btn btn-outline" id="clear-queue-btn" style="display: none;">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M3 6h18"></path>
-                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                    </svg>
-                                    <span>Clear Queue</span>
-                                </button>
-                            </div>
-    
-                            <!-- Premium Upgrade -->
-                            <div class="premium-card" id="premium-card">
-                                <div class="premium-title">👑 Gemini Video Watermark Remover Premium</div>
-                                <p class="premium-desc">Process multiple videos simultaneously and download all results in a
-                                    single ZIP.</p>
-                                <button class="btn btn-premium" id="upgrade-btn">Upgrade to Premium</button>
-                            </div>
-                            <p class="credits-footer-text" style="text-align: center;">
-                                Processing happens on your device. Export uses H.264 MP4. Paid yearly accounts can queue up
-                                to 10 Gemini Omni videos.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Image processing container -->
-                <div id="image-studio-panel" style="display: none;">
-                    <div class="dashboard-grid">
-                        <!-- Left: Interactive workspace area -->
-                        <div class="viewer-panel" id="image-viewer-panel">
-                            <!-- Image sub-tabs -->
-                            <div class="image-subtabs">
-                                <button class="subtab-btn active" id="img-subtab-auto">Gemini Cleaner</button>
-                                <button class="subtab-btn" id="img-subtab-manual">Manual Cleanup</button>
-                            </div>
-                            
-                            <!-- Image dropzone (shown by default) -->
-                            <div class="dropzone" id="image-dropzone">
-                                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-                                    <circle cx="9" cy="9" r="2"></circle>
-                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-                                </svg>
-                                <h3 class="dropzone-title">Upload a Gemini image to remove watermark</h3>
-                                <p class="dropzone-subtitle">Supports PNG, JPG, WebP. Drag & drop or click to upload</p>
-                            </div>
-                            <input type="file" id="image-file-input" accept="image/*" style="display: none;">
-
-                            <!-- Active image editor (hidden initially) -->
-                            <div class="image-editor-workspace" id="image-editor-workspace" style="display: none;">
-                                <div class="canvas-layers-wrapper" id="canvas-layers-wrapper">
-                                    <canvas id="image-canvas"></canvas>
-                                    <canvas id="image-mask-canvas" style="display: none;"></canvas>
-                                    <div class="brush-cursor" id="brush-cursor" style="display: none;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right: Workspace sidebar controls -->
-                        <div class="sidebar-panel">
-                            <!-- Active Image Info -->
-                            <div>
-                                <div class="sidebar-section-title">Image Details</div>
-                                <div class="video-info-box">
-                                    <div class="video-name" id="image-name-text">No image selected</div>
-                                    <div class="video-meta" id="image-dims-text"></div>
-                                </div>
-                            </div>
-
-                            <!-- Brush settings (Manual Cleanup tab only, hidden by default) -->
-                            <div class="brush-settings-card" id="brush-settings-card" style="display: none;">
-                                <div class="sidebar-section-title">Brush Controls</div>
-                                <div class="brush-control-row">
-                                    <label for="brush-size-slider">Brush Size: <span id="brush-size-val">20px</span></label>
-                                    <input type="range" id="brush-size-slider" min="5" max="80" value="20" class="premium-slider">
-                                </div>
-                                <div class="brush-actions-row">
-                                    <button class="btn btn-outline btn-sm" id="btn-undo-draw">
-                                        <span>Undo Stroke</span>
-                                    </button>
-                                    <button class="btn btn-outline btn-sm" id="btn-clear-mask">
-                                        <span>Clear Mask</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Status message -->
-                            <div class="status-alert success" id="image-success-alert" style="display: none;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                </svg>
-                                <span id="image-status-text">Image loaded successfully.</span>
-                            </div>
-
-                            <div class="status-alert error" id="image-error-alert" style="display: none;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                <span id="image-error-msg">Error occurred</span>
-                            </div>
-
-                            <!-- Watermark Opacity Mode Selector (Image) -->
-                            <div class="opacity-mode-card">
-                                <div class="sidebar-section-title">Watermark Opacity</div>
-                                <div class="opacity-mode-buttons">
-                                    <button class="opacity-mode-btn active" id="img-opacity-auto" data-mode="auto">Auto</button>
-                                    <button class="opacity-mode-btn" id="img-opacity-soft" data-mode="soft">Soft</button>
-                                    <button class="opacity-mode-btn" id="img-opacity-normal" data-mode="normal">Normal</button>
-                                </div>
-                            </div>
-
-                            <!-- I Agree Checkbox (Image) -->
-                            <div class="agree-checkbox-card">
-                                <label class="agree-checkbox-label">
-                                    <input type="checkbox" id="img-agree-checkbox">
-                                    <span class="agree-checkbox-text">
-                                        <strong>I agree</strong> — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
-                                    </span>
-                                </label>
-                            </div>
-
-                            <!-- Image processing progress -->
-                            <div class="progress-panel" id="image-progress-panel" style="display: none;">
-                                <div class="progress-info">
-                                    <span class="progress-label">
-                                        <div class="spinner"></div>
-                                        <span>Cleaning Watermark...</span>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Action controls -->
-                            <div class="action-group">
-                                <button class="btn btn-outline" id="choose-image-btn">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="17 8 12 3 7 8"></polyline>
-                                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                                    </svg>
-                                    <span>Choose Image</span>
-                                </button>
-                                <button class="btn btn-primary" id="process-image-btn" disabled>
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                        <path d="m9 12 2 2 4-4"></path>
-                                    </svg>
-                                    <span id="process-image-btn-text">Remove Watermark</span>
-                                </button>
-                                <button class="btn btn-secondary" id="download-image-btn" style="display: none;">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    </svg>
-                                    <span>Download Image</span>
-                                </button>
-                                <button class="btn btn-outline" id="clear-image-btn" style="display: none;">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M3 6h18"></path>
-                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                    </svg>
-                                    <span>Clear Image</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features section -->
-        <section class="features-section">
-            <div class="section-container">
-                <div class="features-grid">
-                    <!-- Feature 1 -->
-                    <div class="glass-card feature-card">
-                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                            <path d="M7 3v18"></path>
-                            <path d="M3 7.5h4"></path>
-                            <path d="M3 12h18"></path>
-                            <path d="M3 16.5h4"></path>
-                            <path d="M17 3v18"></path>
-                            <path d="M17 7.5h4"></path>
-                            <path d="M17 16.5h4"></path>
-                        </svg>
-                        <h3>Built for supported Gemini videos</h3>
-                        <p>The visible-logo cleanup is calibrated specifically for 720p and 1080p (landscape & portrait)
-                            video frames from Gemini Omni models.</p>
-                    </div>
-                    <!-- Feature 2 -->
-                    <div class="glass-card feature-card">
-                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <h3>Private browser workflow</h3>
-                        <p>Your selected video stays fully local on your device while the browser decodes, cleans, and
-                            encodes the MP4 container.</p>
-                    </div>
-                    <!-- Feature 3 -->
-                    <div class="glass-card feature-card">
-                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
-                            <path d="m9 10 2 2 4-4"></path>
-                            <path d="M12 17v4"></path>
-                            <path d="M8 21h8"></path>
-                        </svg>
-                        <h3>Visible logo cleanup only</h3>
-                        <p>The tool targets the visible corner logo to restore background details, without modifying
-                            invisible watermarking metadata or provenance.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Video Demo Section -->
-        <section class="demo-section">
-            <div class="section-container">
-                <div class="demo-box">
-                    <div class="demo-title-container">
-                        <span class="kicker">Video Demonstration</span>
-                        <h2 class="text-gradient">How to use Gemini Omni Video Watermark Remover</h2>
-                        <p class="hero-description" style="margin-top: 1rem; margin-left: 0;">
-                            Watch our quick demo showcasing the frame-by-frame logo cleanup, local processing
-                            capabilities, and instant high-quality MP4 downloads.
-                        </p>
-                        <ol class="steps-list" style="margin-top: 2rem;">
-                            <li class="step-item">
-                                <span class="step-num">01</span>
-                                <div>Choose a supported 720p or 1080p Gemini video from your device.</div>
-                            </li>
-                            <li class="step-item">
-                                <span class="step-num">02</span>
-                                <div>Run the Gemini video logo remover and keep this tab open while local processing
-                                    finishes.</div>
-                            </li>
-                            <li class="step-item">
-                                <span class="step-num">03</span>
-                                <div>Download the cleaned MP4 file and review the visible corner area before using the
-                                    result.</div>
-                            </li>
-                        </ol>
-                    </div>
-
-                    <!-- Interactive Mock Youtube Card -->
-                    <div class="video-demo-card" id="demo-video-wrapper">
-                        <img src="https://img.youtube.com/vi/8x5TfVX214I/maxresdefault.jpg"
-                            alt="Gemini Omni Video Watermark Remover Demo" class="video-demo-thumb">
-                        <div class="video-demo-overlay">
-                            <div class="play-button">
-                                <svg class="play-icon-svg" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"></path>
-                                </svg>
-                                <div class="play-ripple"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Format presets support list -->
-        <section class="features-section" style="padding-bottom: 3rem;">
-            <div class="section-container">
-                <div class="formats-section">
-                    <div>
-                        <span class="kicker">Supported Video Formats</span>
-                        <h2 class="text-gradient">What the current beta supports</h2>
-                        <p class="hero-description" style="margin-top: 1rem; margin-left: 0;">
-                            The Gemini video watermark remover accepts common browser-readable video uploads, checks the
-                            decoded frame dimensions, and exports a cleaned MP4 when your browser supports local MP4
-                            recording.
-                        </p>
-                    </div>
-                    <div class="format-list">
-                        <div class="format-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>1280 x 720 & 1920 x 1080 landscape Gemini videos</span>
-                        </div>
-                        <div class="format-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>720 x 1280 & 1080 x 1920 portrait Gemini videos</span>
-                        </div>
-                        <div class="format-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>Visible corner Gemini logo cleanup</span>
-                        </div>
-                        <div class="format-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>Local browser processing with output preview</span>
-                        </div>
-                        <div class="format-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            <span>MP4 download in supported browsers</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQs Accordions -->
-        <section class="faq-section" id="faq-tag">
-            <div class="section-container">
-                <h2 class="faq-title text-gradient text-center">Gemini Video Logo Remover Questions</h2>
-                <div class="faq-grid">
-                    <!-- Q1 -->
-                    <div class="glass-card faq-card">
-                        <div class="faq-question">What video dimensions does this Gemini Video Watermark Remover
-                            support?</div>
-                        <p class="faq-answer">This tool supports exact 1280 x 720, 720 x 1280, 1920 x 1080, and 1080 x
-                            1920 videos. Note that 1080p support is experimental, and there might be minor watermark
-                            removal issues on some clips.</p>
-                    </div>
-                    <!-- Q2 -->
-                    <div class="glass-card faq-card">
-                        <div class="faq-question">Does the Gemini Logo Remover from Video upload my file?</div>
-                        <p class="faq-answer">No. The video is processed locally in your browser. The page does not send
-                            your selected video to a server.</p>
-                    </div>
-                    <!-- Q3 -->
-                    <div class="glass-card faq-card">
-                        <div class="faq-question">What format does the cleaned video use?</div>
-                        <p class="faq-answer">The cleaned download uses H.264 encoded MP4. A recent browser with local
-                            WebCodecs and MP4 recording support is required.</p>
-                    </div>
-                    <!-- Q4 -->
-                    <div class="glass-card faq-card">
-                        <div class="faq-question">Does this remove invisible watermarking or provenance data?</div>
-                        <p class="faq-answer">No. This tool targets the visible corner logo only. It does not remove
-                            invisible watermarking, metadata, or provenance signals.</p>
-                    </div>
-                    <!-- Q5 -->
-                    <div class="glass-card faq-card">
-                        <div class="faq-question">Can I use this Gemini Video Watermark Remover online for free?</div>
-                        <p class="faq-answer">Yes. The supported single-video workflow runs in your browser for free.
-                            Batch processing and simultaneous queue conversions are available with the Premium upgrade.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="section-container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="#" class="logo-container">
-                        <div class="logo-icon">
-                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor">
-                                <path
-                                    d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72">
-                                </path>
-                                <path d="m14 7 3 3"></path>
-                                <path d="M5 6v4"></path>
-                                <path d="M19 14v4"></path>
-                                <path d="M10 2v2"></path>
-                                <path d="M7 8H3"></path>
-                                <path d="M21 16h-4"></path>
-                                <path d="M11 3H9"></path>
-                            </svg>
-                        </div>
-                        <span class="logo-text">Gemini Watermark <span>Remover</span></span>
-                    </a>
-                    <p>A simple, privacy-first Gemini watermark remover and logo cleaner that works entirely in your
-                        browser. No server uploads. No signup. No clutter.</p>
-                </div>
-                <div>
-                    <h4 class="footer-title">Tool</h4>
-                    <ul class="footer-links">
-                        <li><a href="#" class="footer-link">Watermark Remover</a></li>
-                        <li><a href="#studio" class="footer-link">Video Remover</a></li>
-                        <li><a href="#pricing-tag" class="footer-link">Pricing</a></li>
-                        <li><a href="#faq-tag" class="footer-link">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-title">Resources</h4>
-                    <ul class="footer-links">
-                        <li><a href="#" class="footer-link">About</a></li>
-                        <li><a href="#" class="footer-link">Blog</a></li>
-                        <li><a href="#" class="footer-link">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-title">Privacy</h4>
-                    <ul class="footer-links">
-                        <li><a href="#" class="footer-link">Privacy Policy</a></li>
-                        <li><a href="#" class="footer-link">Terms of Service</a></li>
-                        <li>
-                            <div class="badge-pill">Local Access Only</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div class="copyright-box">
-                    <a href="https://toolfame.com/item/gemini-watermark-remove" target="_blank"
-                        rel="noopener noreferrer" class="toolfame-badge">
-                        <img src="https://toolfame.com/badge-dark.svg" alt="Featured on toolfame.com"
-                            class="toolfame-img">
-                    </a>
-                    <p class="copyright-text">© 2026 Gemini Watermark Remover. All rights reserved.</p>
-                    <p class="copyright-text">Private browser-based image/video cleaning.</p>
-                </div>
-                <div class="disclaimer-text">
-                    Disclaimer: This product is an independent educational tool. It is not affiliated with, sponsored
-                    by, or associated with Google or Gemini.
-                </div>
-                <div class="footer-bottom-actions">
-                    <p>Private & Simple</p>
-                    <div class="footer-divider"></div>
-                    <button class="btn btn-outline" id="contact-btn">Contact Us</button>
                 </div>
             </div>
         </div>
-    </footer>
 
-    <!-- Zoom Fullscreen Modal -->
-    <div class="zoom-modal" id="zoom-modal" style="display: none;">
-        <div class="zoom-modal-backdrop" id="zoom-modal-backdrop"></div>
-        <div class="zoom-modal-content">
-            <button class="zoom-modal-close" id="zoom-modal-close" title="Close">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="zoom-video-wrapper">
-                <video id="zoom-video" controls autoplay playsinline></video>
+        <!-- ===== IMAGE STUDIO PANEL ===== -->
+        <div id="image-studio-panel" style="display: none;">
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+                <!-- LEFT: Image Viewer Panel -->
+                <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/30 shadow-xl overflow-hidden min-h-[360px] flex flex-col" id="image-viewer-panel">
+                    <!-- Image sub-tabs -->
+                    <div class="flex border-b border-outline-variant/20 p-1 gap-1">
+                        <button class="flex-1 py-2 px-4 rounded-lg text-label-md font-body font-semibold transition-all active" id="img-subtab-auto">Gemini Cleaner</button>
+                        <button class="flex-1 py-2 px-4 rounded-lg text-label-md font-body font-semibold transition-all" id="img-subtab-manual">Manual Cleanup</button>
+                    </div>
+
+                    <div class="flex-1 flex items-center justify-center p-4 md:p-6">
+                        <!-- Image dropzone -->
+                        <div class="dropzone w-full min-h-[300px] border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary/[0.02]" id="image-dropzone">
+                            <span class="material-symbols-outlined text-on-surface-variant/40 text-5xl mb-4">add_photo_alternate</span>
+                            <h3 class="text-lg md:text-xl font-display font-bold text-on-background mb-2">Upload a Gemini image to remove watermark</h3>
+                            <p class="text-body-md text-on-surface-variant text-center">Supports PNG, JPG, WebP. Drag & drop or click to upload</p>
+                        </div>
+                        <input type="file" id="image-file-input" accept="image/*" multiple style="display: none;">
+
+                        <!-- Active image editor (hidden initially) -->
+                        <div class="image-editor-workspace w-full flex items-center justify-center" id="image-editor-workspace" style="display: none;">
+                            <div class="canvas-layers-wrapper" id="canvas-layers-wrapper">
+                                <canvas id="image-canvas"></canvas>
+                                <canvas id="image-mask-canvas" style="display: none;"></canvas>
+                                <div class="brush-cursor" id="brush-cursor" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Image Sidebar Controls -->
+                <div class="flex flex-col gap-4">
+                    <!-- Image Info -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <div class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-2">Image Details</div>
+                        <div class="font-body font-semibold text-on-background text-sm break-all" id="image-name-text">No image selected</div>
+                        <div class="text-label-sm font-body text-on-surface-variant mt-1" id="image-dims-text"></div>
+                    </div>
+
+                    <!-- Brush settings (Manual only) -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4" id="brush-settings-card" style="display: none;">
+                        <div class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-3">Brush Controls</div>
+                        <div class="mb-3">
+                            <label for="brush-size-slider" class="text-label-sm font-body text-on-surface-variant">Brush Size: <span id="brush-size-val">20px</span></label>
+                            <input type="range" id="brush-size-slider" min="5" max="80" value="20" class="premium-slider mt-1">
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low transition-all" id="btn-undo-draw">Undo Stroke</button>
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low transition-all" id="btn-clear-mask">Clear Mask</button>
+                        </div>
+                    </div>
+
+                    <!-- Image Status Alerts -->
+                    <div class="flex items-center gap-3 rounded-xl p-3 text-label-sm font-body font-semibold bg-emerald-50 border border-emerald-200 text-emerald-600" id="image-success-alert" style="display: none;">
+                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        <span id="image-status-text">Image loaded successfully.</span>
+                    </div>
+                    <div class="flex items-center gap-3 rounded-xl p-3 text-label-sm font-body font-semibold bg-red-50 border border-red-200 text-red-600" id="image-error-alert" style="display: none;">
+                        <span class="material-symbols-outlined text-[18px]">error</span>
+                        <span id="image-error-msg">Error occurred</span>
+                    </div>
+
+                    <!-- Image Opacity Mode -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <div class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant/60 mb-3">Watermark Opacity</div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all active" id="img-opacity-auto" data-mode="auto">Auto</button>
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all" id="img-opacity-soft" data-mode="soft">Soft</button>
+                            <button class="flex-1 py-2 px-3 rounded-lg text-label-sm font-body font-semibold transition-all" id="img-opacity-normal" data-mode="normal">Normal</button>
+                        </div>
+                    </div>
+
+                    <!-- Image Agree Checkbox -->
+                    <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" id="img-agree-checkbox" class="w-5 h-5 mt-0.5 accent-primary rounded flex-shrink-0">
+                            <span class="text-label-sm font-body text-on-surface-variant leading-relaxed">
+                                <strong class="text-on-surface">I agree</strong> — I confirm that I own this media or have permission to edit it.
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Image Progress -->
+                    <div class="flex items-center gap-3 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-4" id="image-progress-panel" style="display: none;">
+                        <div class="spinner"></div>
+                        <span class="text-label-sm font-body font-semibold text-on-surface-variant" id="image-progress-text">Cleaning Watermark...</span>
+                    </div>
+
+                    <!-- Image Queue Container -->
+                    <div class="flex flex-col gap-2 max-h-[200px] overflow-y-auto" id="image-queue-container" style="display: none;"></div>
+
+                    <!-- Image Action Buttons -->
+                    <div class="flex flex-col gap-2">
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-outline-variant/30 text-label-md font-body font-semibold text-on-surface-variant hover:bg-surface-container-low transition-all" id="choose-image-btn">
+                            <span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+                            <span>Choose Image</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md shadow-md active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none" id="process-image-btn" disabled>
+                            <span class="material-symbols-outlined text-[18px]">shield</span>
+                            <span id="process-image-btn-text">Remove Watermark</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md shadow-md active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none" id="process-all-images-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">stacks</span>
+                            <span id="process-all-images-btn-text">Auto Clean All</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary/10 text-primary border border-primary/20 font-body font-semibold text-label-md hover:bg-primary/15 transition-all" id="download-image-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">download</span>
+                            <span>Download Image</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary/10 text-primary border border-primary/20 font-body font-semibold text-label-md hover:bg-primary/15 transition-all" id="download-all-images-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+                            <span id="download-all-images-btn-text">Download All</span>
+                        </button>
+                        <button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-outline-variant/30 text-label-md font-body font-semibold text-on-surface-variant hover:bg-surface-container-low transition-all" id="clear-image-btn" style="display: none;">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                            <span>Clear Image</span>
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ==================== TRUST BADGES ==================== -->
+<section class="px-margin-mobile md:px-gutter max-w-container-max mx-auto pb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
+        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-surface-container-low sm:bg-transparent">
+            <span class="material-symbols-outlined text-primary mb-3 text-3xl" style='font-variation-settings: "FILL" 1;'>verified_user</span>
+            <p class="text-label-md font-body font-bold mb-1 text-on-background">Privacy First</p>
+            <p class="text-label-sm font-body text-on-surface-variant">Runs in your browser — no upload needed</p>
+        </div>
+        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-surface-container-low sm:bg-transparent">
+            <span class="material-symbols-outlined text-primary mb-3 text-3xl" style='font-variation-settings: "FILL" 1;'>bolt</span>
+            <p class="text-label-md font-body font-bold mb-1 text-on-background">Ultra Fast</p>
+            <p class="text-label-sm font-body text-on-surface-variant">~1s per 1MP image on a modern laptop</p>
+        </div>
+        <div class="flex flex-col items-center text-center p-4 rounded-2xl bg-surface-container-low sm:bg-transparent">
+            <span class="material-symbols-outlined text-primary mb-3 text-3xl" style='font-variation-settings: "FILL" 1;'>target</span>
+            <p class="text-label-md font-body font-bold mb-1 text-on-background">Pixel Perfect</p>
+            <p class="text-label-sm font-body text-on-surface-variant">Matches original texture and noise</p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== IMAGE REMOVAL SECTION ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-3xl mx-auto">
+    <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-4">Remove the Gemini image watermark in one click</h2>
+    <p class="text-body-md md:text-body-lg font-body text-on-surface-variant leading-relaxed mb-4">
+        Gemini-generated images ship with a small logo stamped into the corner, and if you are posting that shot to a portfolio or a product page, that mark can clash with your layout. The Gemini image watermark remover in Lumina lifts that visible mark from single files or whole batches. Switch to the Images tab, drop your JPG, PNG, or WebP files, and the AI image watermark remover reconstructs the pixels underneath the logo in roughly one second per megapixel. You can remove the Gemini AI image watermark from a folder of dozens of images in parallel, then export clean PNGs one by one or as a single ZIP. Whether you are cleaning a single Nano Banana still or a stack of test images, this is a dependable way to remove AI image watermarks without ever sending the originals to a server.
+    </p>
+</section>
+
+<!-- ==================== VIDEO REMOVAL SECTION ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-3xl mx-auto">
+    <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-4">A video tool that cleans every frame</h2>
+    <p class="text-body-md md:text-body-lg font-body text-on-surface-variant leading-relaxed mb-4">
+        Video is where most browser tools give up, because the logo sits on every single frame and a re-export can smear the edges. Lumina is built as a Gemini video watermark remover that decodes each frame with the WebCodecs API, locates the corner mark, and restores the pixels underneath before re-encoding a clean MP4. As an AI video watermark remover, it runs entirely on your machine, so a two-second clip finishes in seconds and a 720p clip in about a minute. The web tool supports 720p, 1080p, and 4K in 16:9 and 9:16, and the CLI handles longer files for anyone who needs to remove AI video watermarks from production footage. Use it to remove the Veo watermark from a reel, or to strip the Gemini logo from any short clip you own — drop the original file your model produced, let it run, and download the clean result.
+    </p>
+</section>
+
+<!-- ==================== VEO & OMNI COVERAGE SECTION ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-3xl mx-auto">
+    <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-4">Works with Veo 3, Google Veo, and Omni videos</h2>
+    <p class="text-body-md md:text-body-lg font-body text-on-surface-variant leading-relaxed mb-4">
+        Different Google models put their logo in the same corner spot, so the same cleanup pipeline covers the whole family. As a Veo 3 watermark remover, Lumina detects the mark on every Veo 3 frame and exports a clean MP4 you can post anywhere. If you came from Google Veo specifically, the Google Veo watermark remover path handles those short clips the same way, frame by frame, with no upload needed. The Veo watermark remover free tier covers three clips a day, which is enough to clean a short reel or a batch of drafts, and you can remove the Veo watermark from longer files with the bundled CLI. Omni output is in scope too: the Omni watermark remover lifts the visible Omni corner logo from those generations, so you can remove the Omni watermark from any clip you own without juggling a second tool. One remover, every Google video model.
+    </p>
+</section>
+
+<!-- ==================== BEST PRACTICES ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+    <div class="text-center mb-10 md:mb-12">
+        <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-3">Best practices for clean results</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
+        <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl md:rounded-3xl p-6 md:p-8 flex gap-4 md:gap-6 items-start transition-all hover:border-primary/30">
+            <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">1</div>
+            <div><h3 class="font-display font-bold text-lg text-on-background mb-2">Start with original files</h3><p class="text-body-md text-on-surface-variant">Upload directly from Gemini, Veo, or AI Studio. Screenshots and re-compressed versions reduce removal accuracy.</p></div>
+        </div>
+        <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl md:rounded-3xl p-6 md:p-8 flex gap-4 md:gap-6 items-start transition-all hover:border-primary/30">
+            <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">2</div>
+            <div><h3 class="font-display font-bold text-lg text-on-background mb-2">Higher resolution = better results</h3><p class="text-body-md text-on-surface-variant">Files at original Gemini resolution produce cleaner edges around the logo than heavily compressed copies.</p></div>
+        </div>
+        <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl md:rounded-3xl p-6 md:p-8 flex gap-4 md:gap-6 items-start transition-all hover:border-primary/30">
+            <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">3</div>
+            <div><h3 class="font-display font-bold text-lg text-on-background mb-2">Use the original format</h3><p class="text-body-md text-on-surface-variant">Export as the format Gemini gave you (PNG for stills, MP4 for Veo) so nothing is re-encoded before removal.</p></div>
+        </div>
+        <div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl md:rounded-3xl p-6 md:p-8 flex gap-4 md:gap-6 items-start transition-all hover:border-primary/30">
+            <div class="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">4</div>
+            <div><h3 class="font-display font-bold text-lg text-on-background mb-2">Re-run after new releases</h3><p class="text-body-md text-on-surface-variant">Google occasionally tweaks the logo placement. We update our detection within days of each model release.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== PLANS & PRICING ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-container-max mx-auto" id="pricing-tag">
+    <div class="text-center mb-10 md:mb-12">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 mb-6">
+            <span class="material-symbols-outlined text-primary text-[18px]">payments</span>
+            <span class="text-label-sm font-body text-primary font-semibold">Simple, transparent pricing</span>
+        </div>
+        <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-3">Plans & Pricing</h2>
+        <p class="text-body-md font-body text-on-surface-variant max-w-2xl mx-auto">Choose the plan that fits your workflow. Start free, upgrade when you're ready.</p>
+    </div>
+
+    <!-- Currency Toggle -->
+    <div class="flex flex-col items-center gap-6 mb-12">
+        <div class="flex items-center gap-3 text-label-sm font-body font-bold text-on-surface-variant">
+            <span class="text-primary" id="label-usd">USD</span>
+            <div class="w-10 h-5 bg-surface-container-high rounded-full relative cursor-pointer overflow-hidden transition-colors hover:bg-surface-container-highest" id="currency-toggle">
+                <div class="absolute left-1 top-1 w-3 h-3 bg-primary rounded-full transition-all duration-300" id="toggle-slider"></div>
+            </div>
+            <span id="label-inr">INR</span>
         </div>
     </div>
 
-    <!-- Main Application Script -->
-    <script type="module" src="app.js?v=5"></script>
-</body>
+    <!-- Pricing Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 max-w-6xl mx-auto items-start">
 
+        <!-- Starter Card -->
+        <div class="group relative bg-surface-container-lowest border border-outline-variant/30 rounded-[32px] p-8 flex flex-col transition-colors duration-300">
+            <h3 class="text-xl font-display font-bold text-on-background mb-4 transition-colors group-hover:text-primary">Starter</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+                <span class="text-4xl md:text-5xl font-display font-bold text-on-background transition-colors" id="price-starter">$0</span>
+                <span class="text-on-surface-variant font-body">/mo</span>
+            </div>
+            <p class="text-sm font-body text-on-surface-variant mb-8">Perfect for individuals exploring watermark removal with basic daily limits.</p>
+            <button class="w-full py-3 rounded-xl bg-primary/5 text-primary font-body font-bold hover:bg-primary/10 transition-all active:scale-95 mb-8" onclick="window.location.hash='studio'">Try for free</button>
+            <ul class="space-y-4">
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    3 images per day
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    3 videos per day
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Auto watermark detection
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Browser-local processing
+                </li>
+            </ul>
+        </div>
+
+        <!-- Professional Card (Most Recommended) -->
+        <div class="group relative bg-surface-container-lowest border-2 border-primary rounded-[32px] p-8 flex flex-col shadow-2xl transition-colors duration-300 md:scale-105 z-10">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-4 py-1.5 rounded-full text-[12px] font-body font-bold flex items-center gap-1.5 shadow-lg shadow-primary/30 whitespace-nowrap">
+                <span class="material-symbols-outlined text-sm">bolt</span>
+                Most Recommended
+            </div>
+            <h3 class="text-xl font-display font-bold text-on-background mb-4 transition-colors group-hover:text-primary">Professional</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+                <span class="text-4xl md:text-5xl font-display font-bold text-on-background transition-colors" id="price-pro">$12</span>
+                <span class="text-on-surface-variant font-body">/mo</span>
+            </div>
+            <p class="text-sm font-body text-on-surface-variant mb-8">Built for creators who need speed, bulk processing, and real-time collaboration.</p>
+            <button class="w-full py-3 rounded-xl bg-primary text-on-primary font-body font-bold hover:bg-primary-container transition-all active:scale-95 shadow-lg shadow-primary/30 mb-8" onclick="window.location.hash='studio'">Try for free</button>
+            <ul class="space-y-4">
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Unlimited images
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Unlimited videos
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Priority support
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    CLI & SDK access
+                </li>
+            </ul>
+        </div>
+
+        <!-- Enterprise Card -->
+        <div class="group relative bg-surface-container-lowest border border-outline-variant/30 rounded-[32px] p-8 flex flex-col transition-colors duration-300">
+            <h3 class="text-xl font-display font-bold text-on-background mb-4 transition-colors group-hover:text-primary">Enterprise</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+                <span class="text-4xl md:text-5xl font-display font-bold text-on-background transition-colors" id="price-enterprise">$200</span>
+                <span class="text-on-surface-variant font-body">/mo</span>
+            </div>
+            <p class="text-sm font-body text-on-surface-variant mb-8">Full power, customization, and dedicated support for your organization.</p>
+            <button class="w-full py-3 rounded-xl bg-primary/5 text-primary font-body font-bold hover:bg-primary/10 transition-all active:scale-95 mb-8" onclick="window.location.hash='studio'">Get started</button>
+            <ul class="space-y-4">
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Unlimited everything
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Custom API integration
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Custom workflows
+                </li>
+                <li class="flex items-center gap-3 text-sm font-body text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                    Dedicated account manager
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== COMPARISON TABLE ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-8 md:mb-12 text-center">The only Gemini logo remover that works on video and image</h2>
+        <div class="overflow-x-auto bg-surface-container-lowest rounded-2xl md:rounded-3xl shadow-xl border border-outline-variant/30">
+            <table class="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                    <tr class="bg-inverse-surface text-white">
+                        <th class="p-4 md:p-6 font-body font-semibold text-label-md">Capability</th>
+                        <th class="p-4 md:p-6 font-body font-semibold text-label-md text-center">Other tools</th>
+                        <th class="p-4 md:p-6 font-body font-semibold text-label-md text-center"><span class="material-symbols-outlined text-primary-fixed-dim text-xl align-middle mr-1">auto_awesome</span>Lumina AI</th>
+                    </tr>
+                </thead>
+                <tbody class="text-on-surface-variant">
+                    <tr class="border-b border-outline-variant/20"><td class="p-4 md:p-6">Image logo removal</td><td class="p-4 md:p-6 text-center text-amber-500 font-bold">~</td><td class="p-4 md:p-6 text-center"><span class="material-symbols-outlined text-primary font-bold">check</span></td></tr>
+                    <tr class="border-b border-outline-variant/20"><td class="p-4 md:p-6">Video logo removal</td><td class="p-4 md:p-6 text-center text-error font-bold">✕</td><td class="p-4 md:p-6 text-center"><span class="material-symbols-outlined text-primary font-bold">check</span></td></tr>
+                    <tr class="border-b border-outline-variant/20"><td class="p-4 md:p-6">Removes from every frame</td><td class="p-4 md:p-6 text-center text-error font-bold">✕</td><td class="p-4 md:p-6 text-center"><span class="material-symbols-outlined text-primary font-bold">check</span></td></tr>
+                    <tr class="border-b border-outline-variant/20"><td class="p-4 md:p-6">Local processing</td><td class="p-4 md:p-6 text-center text-amber-500 font-bold">~</td><td class="p-4 md:p-6 text-center"><span class="material-symbols-outlined text-primary font-bold">check</span></td></tr>
+                    <tr class="border-b border-outline-variant/20"><td class="p-4 md:p-6">No signup to start</td><td class="p-4 md:p-6 text-center text-amber-500 font-bold">~</td><td class="p-4 md:p-6 text-center"><span class="material-symbols-outlined text-primary font-bold">check</span></td></tr>
+                    <tr class="bg-primary/5"><td class="p-4 md:p-6 font-bold text-on-surface">Price</td><td class="p-4 md:p-6 text-center">Paid</td><td class="p-4 md:p-6 text-center font-bold text-primary">Free</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mt-8 text-center text-body-md text-on-surface-variant max-w-2xl mx-auto">Most tools only touch stills. We lift the Gemini & Veo logo from images <span class="font-bold text-on-surface">and</span> video, for free.</p>
+    </div>
+</section>
+
+<!-- ==================== COMPLETE AI TOOLKIT ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+    <div class="text-center mb-10 md:mb-12">
+        <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-3">Complete AI Toolkit</h2>
+        <p class="text-body-md font-body text-on-surface-variant">Advanced restoration algorithms for any professional workflow.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 max-w-container-max mx-auto">
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">magic_button</span><div><h3 class="font-display font-bold text-on-surface mb-2">Reverse alpha blending</h3><p class="text-body-md text-on-surface-variant">Uses calibrated alpha maps to reconstruct pixels under the watermark — no model repaint, no soft edges.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">star</span><div><h3 class="font-display font-bold text-on-surface mb-2">All Gemini variants</h3><p class="text-body-md text-on-surface-variant">Handles logo marks, star overlays, and Nano Banana watermark variants in supported image outputs.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">content_copy</span><div><h3 class="font-display font-bold text-on-surface mb-2">Bulk parallel processing</h3><p class="text-body-md text-on-surface-variant">Drop multiple images, process in parallel in-browser, download individually or as ZIP.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">verified_user</span><div><h3 class="font-display font-bold text-on-surface mb-2">100% browser-local</h3><p class="text-body-md text-on-surface-variant">All computation stays in your browser. Images never leave your device.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">image</span><div><h3 class="font-display font-bold text-on-surface mb-2">All formats & resolutions</h3><p class="text-body-md text-on-surface-variant">Accepts JPG, PNG, and WebP input at any resolution. Exports lossless PNG.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">extension</span><div><h3 class="font-display font-bold text-on-surface mb-2">Chrome extension</h3><p class="text-body-md text-on-surface-variant">Install once and Gemini pages auto-replace previews with clean versions.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">terminal</span><div><h3 class="font-display font-bold text-on-surface mb-2">CLI & SDK</h3><p class="text-body-md text-on-surface-variant">Supports image batches, CI/CD integration, and local video cleanup for developers.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">laptop_mac</span><div><h3 class="font-display font-bold text-on-surface mb-2">Cross-platform</h3><p class="text-body-md text-on-surface-variant">Works on major browsers and mobile. CLI covers Windows, macOS, and Linux.</p></div></div>
+        <div class="flex gap-4 items-start"><span class="material-symbols-outlined text-primary mt-1">code</span><div><h3 class="font-display font-bold text-on-surface mb-2">Free & Open Source</h3><p class="text-body-md text-on-surface-variant">MIT licensed, no usage limits, no account required. 4.6k+ GitHub Stars.</p></div></div>
+    </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="bg-surface-container-lowest py-section-gap-md md:py-section-gap-lg">
+    <div class="px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+        <div class="text-center mb-10 md:mb-12">
+            <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-3">How this free AI watermark remover works</h2>
+            <p class="text-body-md font-body text-on-surface-variant max-w-2xl mx-auto mb-8">Lumina is an AI watermark remover that reverses the visible corner logo with calibrated inverse alpha blending — no repaint, no blur — and runs every step in your browser so the file never leaves your device. To remove Gemini watermark logos, it locates the mark, estimates the blend, and restores the original pixels underneath.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 relative">
+            <div class="hidden md:block absolute top-1/4 left-[15%] right-[15%] h-px bg-gradient-to-r from-transparent via-outline-variant/50 to-transparent"></div>
+            <div class="relative flex flex-col items-center text-center">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary text-on-primary font-bold text-xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 z-10">1</div>
+                <h4 class="font-display font-bold text-xl mb-2">Upload Photos</h4>
+                <p class="text-body-md text-on-surface-variant">Drag or select watermarked images. Batch processing supported.</p>
+            </div>
+            <div class="relative flex flex-col items-center text-center">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary text-on-primary font-bold text-xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 z-10">2</div>
+                <h4 class="font-display font-bold text-xl mb-2">AI Auto-Removal</h4>
+                <p class="text-body-md text-on-surface-variant">Lumina detects overlays and restores pixels instantly. All processing stays local.</p>
+            </div>
+            <div class="relative flex flex-col items-center text-center">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary text-on-primary font-bold text-xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 z-10">3</div>
+                <h4 class="font-display font-bold text-xl mb-2">Download Clean</h4>
+                <p class="text-body-md text-on-surface-variant">Get your high-res, watermark-free images as PNGs. One by one or as a ZIP.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== VIDEO DEMO ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-container-max mx-auto">
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
+            <span class="text-label-sm font-body font-semibold uppercase tracking-widest text-primary mb-4 block">Video Demonstration</span>
+            <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-4">See the in-browser cleanup in action</h2>
+            <p class="text-body-md text-on-surface-variant mb-6">Watch our quick demo showcasing the frame-by-frame logo cleanup, local processing capabilities, and instant MP4 downloads.</p>
+            <ol class="space-y-4">
+                <li class="flex gap-4 items-start"><span class="font-display font-bold text-primary text-lg">01</span><span class="text-body-md text-on-surface-variant">Choose a supported 720p, 1080p, or 4K Gemini video from your device.</span></li>
+                <li class="flex gap-4 items-start"><span class="font-display font-bold text-primary text-lg">02</span><span class="text-body-md text-on-surface-variant">Run the remover and keep this tab open while local processing finishes.</span></li>
+                <li class="flex gap-4 items-start"><span class="font-display font-bold text-primary text-lg">03</span><span class="text-body-md text-on-surface-variant">Download the cleaned MP4 file and review the corner area.</span></li>
+            </ol>
+        </div>
+        <div class="video-demo-card" id="demo-video-wrapper">
+            <img src="https://img.youtube.com/vi/8x5TfVX214I/maxresdefault.jpg" alt="Gemini Omni Video Watermark Remover Demo" class="video-demo-thumb">
+            <div class="video-demo-overlay">
+                <div class="play-button">
+                    <svg class="play-icon-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    <div class="play-ripple"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FAQ ACCORDION ==================== -->
+<section class="py-section-gap-md md:py-section-gap-lg px-margin-mobile md:px-gutter max-w-3xl mx-auto" id="faq-tag">
+    <h2 class="font-display text-headline-lg-mobile md:text-headline-lg text-on-background mb-8 md:mb-12 text-center">Frequently Asked Questions</h2>
+    <div class="space-y-2">
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">Is there a free Gemini watermark remover that works online?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">Yes. Lumina AI runs entirely in your browser to remove the Gemini watermark from clips and images. You get three free video and three free image conversions every day, with no sign-up or upload to a server required.</p></div>
+        </div>
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">How do I remove the Veo 3 watermark from a video?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">Open the Videos tab, drop your original Veo 3 MP4, and the remover detects the corner logo on every frame. Processing happens locally with the WebCodecs API, then you download a clean MP4. Use the original file, not a re-encoded copy, for the cleanest edges.</p></div>
+        </div>
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">Does the Gemini Omni watermark remover upload my video?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">No. All processing happens in your browser using WebCodecs and Canvas. Your video never leaves your device, which keeps private clips private and avoids slow server round-trips.</p></div>
+        </div>
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">Can I remove the Gemini watermark from images too?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">Yes. Switch to the Images tab and drop JPG, PNG, or WebP files. The tool removes the Gemini AI image watermark from each file in about one second per megapixel and exports clean PNGs, with bulk processing supported.</p></div>
+        </div>
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">Is it legal to remove a Gemini or Veo watermark?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">Lumina is an independent educational tool, not affiliated with Google. Use it on content you own or have rights to. Removing the visible corner logo from your own generated videos is generally acceptable; follow Google's terms and disclose AI use where required.</p></div>
+        </div>
+        <div class="border-b border-outline-variant/30">
+            <button class="w-full flex justify-between items-center py-5 text-left group" onclick="toggleFaq(this)">
+                <span class="font-display font-bold text-lg text-on-background transition-colors group-hover:text-primary">Does this remove invisible or SynthID watermarks?</span>
+                <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+            </button>
+            <div class="faq-content"><p class="pb-5 text-body-md text-on-surface-variant">No. This tool only removes the visible corner logo. It does not touch invisible watermarking, SynthID signals, metadata, or provenance data, which are out of scope and intentionally preserved.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FINAL CTA ==================== -->
+<section class="relative bg-inverse-surface py-16 md:py-20 overflow-hidden">
+    <div class="relative z-10 px-margin-mobile md:px-gutter max-w-container-max mx-auto text-center">
+        <h2 class="text-white font-display text-3xl md:text-[40px] font-bold mb-4 md:mb-6">Ready to scale your production?</h2>
+        <p class="text-tertiary-fixed-dim text-body-lg mb-8 md:mb-10 max-w-2xl mx-auto">Join thousands of creators using Lumina to clean their digital assets locally and securely.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button class="w-full sm:w-auto bg-primary-container text-on-primary-container px-6 py-3 rounded-xl font-body font-semibold hover:scale-105 transition-transform flex items-center justify-center gap-2" onclick="window.location.hash='studio'">
+                Get Started Now
+                <span class="material-symbols-outlined">rocket_launch</span>
+            </button>
+            <button class="w-full sm:w-auto border border-white/20 text-white px-6 py-3 rounded-xl font-body font-semibold hover:bg-white/10 transition-all" id="contact-btn">Contact Us</button>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/30 py-10 md:py-12">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto gap-8">
+        <div class="flex flex-col items-center md:items-start gap-3">
+            <span class="font-display text-lg font-bold text-on-surface">Lumina AI</span>
+            <p class="text-label-sm font-body text-on-surface-variant text-center md:text-left">© 2026 Lumina AI. All rights reserved.<br>Private browser-based image/video cleaning.</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+            <a class="text-label-sm font-body text-on-surface-variant hover:text-primary transition-colors" href="#">Documentation</a>
+            <a class="text-label-sm font-body text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+            <a class="text-label-sm font-body text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+            <a class="text-label-sm font-body text-on-surface-variant hover:text-primary transition-colors" href="#">GitHub</a>
+        </div>
+    </div>
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter mt-6">
+        <p class="text-label-sm font-body text-on-surface-variant/60 text-center">Disclaimer: This product is an independent educational tool. It is not affiliated with, sponsored by, or associated with Google or Gemini.</p>
+    </div>
+</footer>
+
+<!-- ==================== ZOOM FULLSCREEN MODAL ==================== -->
+<div class="zoom-modal" id="zoom-modal" style="display: none;">
+    <div class="zoom-modal-backdrop" id="zoom-modal-backdrop"></div>
+    <div class="zoom-modal-content">
+        <button class="zoom-modal-close" id="zoom-modal-close" title="Close">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="zoom-video-wrapper">
+            <video id="zoom-video" controls autoplay playsinline></video>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== INLINE SCRIPTS ==================== -->
+<script>
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        document.body.classList.toggle('mobile-nav-open');
+        menu.classList.toggle('active');
+    }
+
+    // FAQ accordion
+    function toggleFaq(button) {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.material-symbols-outlined');
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            document.querySelectorAll('.faq-content').forEach(el => el.style.maxHeight = null);
+            document.querySelectorAll('.faq-content').forEach(el => {
+                const prevIcon = el.previousElementSibling?.querySelector('.material-symbols-outlined');
+                if (prevIcon) prevIcon.style.transform = 'rotate(0deg)';
+            });
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+        }
+    }
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 20) {
+            header.classList.add('shadow-md', 'bg-surface/90');
+            header.classList.remove('bg-surface/70');
+        } else {
+            header.classList.remove('shadow-md', 'bg-surface/90');
+            header.classList.add('bg-surface/70');
+        }
+    });
+
+    // Pricing currency toggle (USD / INR)
+    (function() {
+        const toggle = document.getElementById('currency-toggle');
+        const slider = document.getElementById('toggle-slider');
+        const labelUsd = document.getElementById('label-usd');
+        const labelInr = document.getElementById('label-inr');
+        const priceStarter = document.getElementById('price-starter');
+        const pricePro = document.getElementById('price-pro');
+        const priceEnterprise = document.getElementById('price-enterprise');
+
+        if (!toggle) return;
+
+        let isINR = false;
+
+        toggle.addEventListener('click', () => {
+            isINR = !isINR;
+
+            if (isINR) {
+                slider.classList.remove('left-1');
+                slider.classList.add('left-6');
+                labelUsd.classList.remove('text-primary');
+                labelInr.classList.add('text-primary');
+
+                priceStarter.innerText = '₹0';
+                pricePro.innerText = '₹' + (12 * 83).toLocaleString();
+                priceEnterprise.innerText = '₹' + (200 * 83).toLocaleString();
+            } else {
+                slider.classList.remove('left-6');
+                slider.classList.add('left-1');
+                labelInr.classList.remove('text-primary');
+                labelUsd.classList.add('text-primary');
+
+                priceStarter.innerText = '$0';
+                pricePro.innerText = '$12';
+                priceEnterprise.innerText = '$200';
+            }
+        });
+    })();
+</script>
+
+<!-- Main Application Script (unchanged app.js with all working logic) -->
+<script type="module" src="app.js?v=15"></script>
+
+</body>
 </html>

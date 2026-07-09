@@ -1,8 +1,9 @@
-import { processVideoWatermark, cleanImageWatermarkAuto, cleanImageWatermarkManual } from './processor.js?v=5';
+import { processVideoWatermark, cleanImageWatermarkAuto, cleanImageWatermarkManual } from './processor.js?v=16';
 
 // Application State
 let activeQueue = [];
 let activeVideoIndex = -1;
+let isBulkProcessing = false;
 let isPremium = false;
 let isLoggedIn = false;
 let videoOpacityMode = "auto"; // auto, soft, normal
@@ -50,7 +51,9 @@ const processBar = document.getElementById("process-bar");
 const chooseVideoBtn = document.getElementById("choose-video-btn");
 const chooseBtnText = document.getElementById("choose-btn-text");
 const processVideoBtn = document.getElementById("process-video-btn");
+const processAllBtn = document.getElementById("process-all-btn");
 const downloadVideoBtn = document.getElementById("download-video-btn");
+const downloadAllBtn = document.getElementById("download-all-btn");
 const clearQueueBtn = document.getElementById("clear-queue-btn");
 const upgradeBtn = document.getElementById("upgrade-btn");
 const premiumCard = document.getElementById("premium-card");
@@ -71,7 +74,11 @@ const imgOpacityNormalBtn = document.getElementById("img-opacity-normal");
 const imgAgreeCheckbox = document.getElementById("img-agree-checkbox");
 
 // Supported Dimensions Set
-const SUPPORTED_DIMENSIONS = new Set(["1280x720", "720x1280", "1920x1080", "1080x1920", "848x478", "478x848"]);
+const SUPPORTED_DIMENSIONS = new Set(["1280x720", "720x1280", "1920x1080", "1080x1920", "3840x2160", "2160x3840", "848x478", "478x848"]);
+
+// Bulk queue limits
+const MAX_QUEUE_SIZE = 20;
+const MAX_IMAGE_QUEUE_SIZE = 20;
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
@@ -124,7 +131,7 @@ function initCredits() {
 
 function updateCreditsUI() {
     if (isPremium) {
-        creditBadgeText.innerText = `👑 Premium | Queue: ${activeQueue.length}/10`;
+        creditBadgeText.innerText = `👑 Premium | Queue: ${activeQueue.length}/${MAX_QUEUE_SIZE}`;
         premiumBadge.classList.add("premium");
 
         creditsFraction.innerText = "Unlimited";
@@ -170,7 +177,7 @@ function updateCreditsUI() {
 }
 
 function updateProcessButtonState() {
-    if (activeVideoIndex === -1) {
+    if (activeVideoIndex === -1 || isBulkProcessing) {
         processVideoBtn.disabled = true;
         return;
     }
@@ -244,16 +251,15 @@ async function handleSelectedFiles(files) {
         return;
     }
 
-    const targetLimit = isPremium ? 10 : 1;
-    const spaceLeft = targetLimit - activeQueue.length;
+    const spaceLeft = MAX_QUEUE_SIZE - activeQueue.length;
 
     if (spaceLeft <= 0) {
-        if (isPremium) {
-            showError("Queue limit of 10 videos reached.");
-        } else {
-            showError("Free mode supports one video at a time. Upgrade to Premium to process multiple files.");
-        }
+        showError(`Queue limit of ${MAX_QUEUE_SIZE} videos reached. Process or clear some videos first.`);
         return;
+    }
+
+    if (filtered.length > spaceLeft) {
+        showError(`Only ${spaceLeft} more video(s) can be added (max ${MAX_QUEUE_SIZE} at a time). Extra files were skipped.`);
     }
 
     const filesToLoad = filtered.slice(0, spaceLeft);
@@ -262,7 +268,7 @@ async function handleSelectedFiles(files) {
         try {
             const videoDims = await getVideoDimensions(file);
             if (!SUPPORTED_DIMENSIONS.has(videoDims)) {
-                showError(`Unsupported dimensions: ${videoDims.replace("x", " x ")}. Supported: 1280x720, 720x1280, 1920x1080, or 1080x1920.`);
+                showError(`Unsupported dimensions: ${videoDims.replace("x", " x ")}. Supported: 720p (1280x720), 1080p (1920x1080), 4K (3840x2160) in 16:9 or 9:16. If this video came from WhatsApp or social media it was re-encoded and resized — download the original MP4 directly from Gemini and upload that instead.`);
                 continue;
             }
 
@@ -281,7 +287,7 @@ async function handleSelectedFiles(files) {
 
             activeQueue.push(queueItem);
         } catch (e) {
-            showError("Could not retrieve video dimensions. Make sure the file is a valid MP4.");
+            showError("Could not retrieve video dimensions. Make sure the file is a valid MP4 downloaded directly from Gemini (not forwarded via WhatsApp or social media).");
         }
     }
 
@@ -322,24 +328,18 @@ function selectQueueItem(index) {
     dropzone.style.display = "none";
     previewGrid.style.display = "grid";
 
-    // Set preview grid layout based on video aspect ratio (portrait vs landscape)
-    const isPortrait = item.dimensions === "720x1280" || item.dimensions === "1080x1920";
-    if (isPortrait) {
-        previewGrid.className = "preview-grid portrait";
-    } else {
-        previewGrid.className = "preview-grid landscape";
-    }
-
     srcVideo.src = item.sourceUrl;
 
     if (item.outputUrl) {
         destVideo.src = item.outputUrl;
         destVideoContainer.style.display = "flex";
         downloadVideoBtn.style.display = "inline-flex";
+        previewGrid.className = "video-matched-grid w-full has-output";
     } else {
         destVideo.removeAttribute("src");
         destVideoContainer.style.display = "none";
         downloadVideoBtn.style.display = "none";
+        previewGrid.className = "video-matched-grid w-full";
     }
 
     // Sidebar text info
@@ -365,8 +365,9 @@ function selectQueueItem(index) {
 }
 
 function renderQueueList() {
-    if (activeQueue.length <= 1) {
+    if (activeQueue.length === 0) {
         queueContainer.style.display = "none";
+        updateBulkControls();
         return;
     }
 
@@ -387,19 +388,43 @@ function renderQueueList() {
         nameSpan.innerText = `${index + 1}. ${item.file.name}`;
 
         const statusSpan = document.createElement("span");
-        statusSpan.className = "queue-status";
+        statusSpan.className = `queue-status status-${item.status}`;
 
         if (item.status === "processing") {
             statusSpan.innerText = `Processing ${Math.round(item.progress)}%`;
+        } else if (item.status === "done") {
+            statusSpan.innerText = "✓ Done";
+        } else if (item.status === "error") {
+            statusSpan.innerText = "✕ Failed";
         } else {
-            statusSpan.innerText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+            statusSpan.innerText = "Ready";
         }
 
         detailBox.appendChild(nameSpan);
         detailBox.appendChild(statusSpan);
+        qItem.appendChild(detailBox);
+
+        if (item.status === "done" && item.outputUrl) {
+            const dlBtn = document.createElement("button");
+            dlBtn.className = "queue-dl-btn";
+            dlBtn.title = "Download cleaned MP4";
+            dlBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            `;
+            dlBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                downloadQueueItem(item);
+            });
+            qItem.appendChild(dlBtn);
+        }
 
         const removeBtn = document.createElement("button");
         removeBtn.className = "queue-remove-btn";
+        removeBtn.title = "Remove from queue";
         removeBtn.innerHTML = `
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 6h18"></path>
@@ -412,14 +437,36 @@ function renderQueueList() {
             removeQueueItem(index);
         });
 
-        qItem.appendChild(detailBox);
         qItem.appendChild(removeBtn);
         queueContainer.appendChild(qItem);
     });
+
+    updateBulkControls();
+}
+
+// Shows/hides "Remove From All" and "Download All" based on queue state
+function updateBulkControls() {
+    const pendingCount = activeQueue.filter(i => i.status === "ready" || i.status === "error").length;
+    const doneCount = activeQueue.filter(i => i.status === "done" && i.outputUrl).length;
+
+    if (pendingCount > 1 && !isBulkProcessing) {
+        processAllBtn.style.display = "inline-flex";
+        document.getElementById("process-all-btn-text").innerText = `Remove From All (${pendingCount})`;
+    } else if (!isBulkProcessing) {
+        processAllBtn.style.display = "none";
+    }
+
+    if (doneCount > 1) {
+        downloadAllBtn.style.display = "inline-flex";
+        document.getElementById("download-all-btn-text").innerText = `Download All (${doneCount})`;
+    } else {
+        downloadAllBtn.style.display = "none";
+    }
 }
 
 function removeQueueItem(index) {
     const removedItem = activeQueue[index];
+    if (isBulkProcessing || (removedItem && removedItem.status === "processing")) return;
 
     // Revoke blobs
     if (removedItem.sourceUrl) URL.revokeObjectURL(removedItem.sourceUrl);
@@ -459,6 +506,8 @@ function resetToEmptyState() {
     statusErrorAlert.style.display = "none";
     downloadVideoBtn.style.display = "none";
     clearQueueBtn.style.display = "none";
+    processAllBtn.style.display = "none";
+    downloadAllBtn.style.display = "none";
 
     updateCreditsUI();
 }
@@ -469,9 +518,77 @@ function showError(msg) {
     statusSuccessAlert.style.display = "none";
 }
 
-// Triggers watermark removal processing
+// Throws a flagged error when the daily free credit budget is used up
+function ensureCreditsAvailable() {
+    if (isPremium) return;
+    const limit = isLoggedIn ? 6 : 3;
+    if (limit - getUsedCreditsCount() <= 0) {
+        const err = new Error("Daily credit limit reached. Please upgrade to Premium.");
+        err.creditsExhausted = true;
+        throw err;
+    }
+}
+
+// Core per-item watermark removal shared by single & bulk flows
+async function processQueueItem(index, bulkInfo) {
+    const item = activeQueue[index];
+
+    ensureCreditsAvailable();
+
+    item.status = "processing";
+    item.progress = 0;
+    item.error = null;
+    renderQueueList();
+
+    const bulkPrefix = bulkInfo ? `Video ${bulkInfo.current}/${bulkInfo.total} — ` : "";
+    const arrayBuffer = await item.file.arrayBuffer();
+
+    const resultBlob = await processVideoWatermark(arrayBuffer, item.mode, videoOpacityMode, (progress) => {
+        // Callback for progress updates
+        let pct = 0;
+        let stage = "Processing";
+        if (progress.stage === "demux") {
+            pct = progress.ratio * 8;
+            stage = "Demuxing Video";
+        } else if (progress.stage === "process") {
+            pct = 8 + (progress.ratio * 88);
+            stage = "Erasing Watermarks";
+        } else if (progress.stage === "mux") {
+            pct = 97;
+            stage = "Finalizing Output";
+        } else if (progress.stage === "done") {
+            pct = 100;
+            stage = "Completed";
+        }
+
+        item.progress = pct;
+        processStageText.innerText = bulkPrefix + stage;
+        processPercentageText.innerText = `${Math.round(pct)}%`;
+        processBar.style.width = `${pct}%`;
+
+        // Re-render queue item percentages
+        renderQueueList();
+    });
+
+    // Processing success
+    item.outputUrl = URL.createObjectURL(resultBlob);
+    item.status = "done";
+    incrementCreditsUsage();
+
+    // Update previews if this item is the currently selected one
+    if (index === activeVideoIndex) {
+        destVideo.src = item.outputUrl;
+        destVideoContainer.style.display = "flex";
+        downloadVideoBtn.style.display = "inline-flex";
+        previewGrid.className = "video-matched-grid w-full has-output";
+    }
+
+    renderQueueList();
+}
+
+// Triggers watermark removal for the selected video only
 async function triggerVideoProcessing() {
-    if (activeVideoIndex === -1) return;
+    if (activeVideoIndex === -1 || isBulkProcessing) return;
 
     const item = activeQueue[activeVideoIndex];
     if (item.status === "processing") return;
@@ -482,90 +599,92 @@ async function triggerVideoProcessing() {
         return;
     }
 
-    // Check credits first
-    if (!isPremium) {
-        const remaining = isLoggedIn ? 6 - getUsedCreditsCount() : 3 - getUsedCreditsCount();
-        if (remaining <= 0) {
-            showError("Daily credit limit reached. Please upgrade to Premium.");
-            return;
+    statusSuccessAlert.style.display = "none";
+    statusErrorAlert.style.display = "none";
+    progressPanel.style.display = "flex";
+    disableControlsDuringProcessing(true);
+
+    try {
+        await processQueueItem(activeVideoIndex);
+    } catch (err) {
+        console.error("Video conversion failed:", err);
+        item.status = err.creditsExhausted ? "ready" : "error";
+        item.error = err.message || "An unexpected error occurred during rendering.";
+        showError(item.error);
+    } finally {
+        progressPanel.style.display = "none";
+        disableControlsDuringProcessing(false);
+        renderQueueList();
+        updateCreditsUI();
+    }
+}
+
+// Bulk: process every pending video in the queue sequentially (up to 20)
+async function triggerBulkVideoProcessing() {
+    if (isBulkProcessing) return;
+
+    // Check agree checkbox
+    if (!agreeCheckbox.checked) {
+        showError("Please confirm that you own this media or have permission to edit it.");
+        return;
+    }
+
+    const pendingIndexes = activeQueue
+        .map((item, i) => (item.status === "ready" || item.status === "error") ? i : -1)
+        .filter(i => i !== -1);
+
+    if (pendingIndexes.length === 0) return;
+
+    isBulkProcessing = true;
+    statusSuccessAlert.style.display = "none";
+    statusErrorAlert.style.display = "none";
+    progressPanel.style.display = "flex";
+    disableControlsDuringProcessing(true);
+
+    let processedCount = 0;
+    let failedCount = 0;
+
+    for (let n = 0; n < pendingIndexes.length; n++) {
+        const idx = pendingIndexes[n];
+        try {
+            await processQueueItem(idx, { current: n + 1, total: pendingIndexes.length });
+            processedCount++;
+        } catch (err) {
+            console.error("Bulk video processing failed:", err);
+            const item = activeQueue[idx];
+            if (err.creditsExhausted) {
+                item.status = "ready";
+                showError(`Daily credit limit reached after ${processedCount} video(s). Upgrade to Premium for unlimited processing.`);
+                break;
+            }
+            item.status = "error";
+            item.error = err.message || "Processing failed.";
+            failedCount++;
         }
     }
 
-    try {
-        // Update states
-        item.status = "processing";
-        item.progress = 0;
-        renderQueueList();
+    isBulkProcessing = false;
+    progressPanel.style.display = "none";
+    disableControlsDuringProcessing(false);
+    renderQueueList();
+    updateCreditsUI();
 
-        statusSuccessAlert.style.display = "none";
-        statusErrorAlert.style.display = "none";
-        progressPanel.style.display = "flex";
-        disableControlsDuringProcessing(true);
-
-        const arrayBuffer = await item.file.arrayBuffer();
-
-        const resultBlob = await processVideoWatermark(arrayBuffer, item.mode, videoOpacityMode, (progress) => {
-            // Callback for progress updates
-            let pct = 0;
-            if (progress.stage === "demux") {
-                pct = progress.ratio * 8;
-                processStageText.innerText = "Demuxing Video";
-            } else if (progress.stage === "process") {
-                pct = 8 + (progress.ratio * 88);
-                processStageText.innerText = "Erasing Watermarks";
-            } else if (progress.stage === "mux") {
-                pct = 97;
-                processStageText.innerText = "Finalizing Output";
-            } else if (progress.stage === "done") {
-                pct = 100;
-                processStageText.innerText = "Completed";
-            }
-
-            item.progress = pct;
-            processPercentageText.innerText = `${Math.round(pct)}%`;
-            processBar.style.width = `${pct}%`;
-
-            // Re-render queue item percentages
-            renderQueueList();
-        });
-
-        // Processing success
-        const resultUrl = URL.createObjectURL(resultBlob);
-        item.outputUrl = resultUrl;
-        item.status = "done";
-
-        // Update previews
-        destVideo.src = resultUrl;
-        destVideoContainer.style.display = "flex";
-
-        progressPanel.style.display = "none";
-        downloadVideoBtn.style.display = "inline-flex";
-        disableControlsDuringProcessing(false);
-
-        incrementCreditsUsage();
-        renderQueueList();
-    } catch (err) {
-        console.error("Video conversion failed:", err);
-        item.status = "error";
-        item.error = err.message || "An unexpected error occurred during rendering.";
-        showError(item.error);
-        progressPanel.style.display = "none";
-        disableControlsDuringProcessing(false);
-        renderQueueList();
+    if (processedCount > 0) {
+        showTemporaryAlert(`Bulk processing finished: ${processedCount} cleaned${failedCount ? `, ${failedCount} failed` : ""}.`);
     }
 }
 
 function disableControlsDuringProcessing(disable) {
     chooseVideoBtn.disabled = disable;
     processVideoBtn.disabled = disable;
+    processAllBtn.disabled = disable;
+    downloadAllBtn.disabled = disable;
     clearQueueBtn.disabled = disable;
     loginBtn.disabled = disable;
     upgradeBtn.disabled = disable;
 }
 
-function triggerDownload() {
-    if (activeVideoIndex === -1) return;
-    const item = activeQueue[activeVideoIndex];
+function downloadQueueItem(item) {
     if (!item.outputUrl) return;
 
     const originalName = item.file.name;
@@ -577,6 +696,21 @@ function triggerDownload() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function triggerDownload() {
+    if (activeVideoIndex === -1) return;
+    downloadQueueItem(activeQueue[activeVideoIndex]);
+}
+
+// Downloads every cleaned video in the queue
+async function downloadAllVideos() {
+    const doneItems = activeQueue.filter(item => item.status === "done" && item.outputUrl);
+    for (const item of doneItems) {
+        downloadQueueItem(item);
+        // Small delay so browsers don't drop successive downloads
+        await new Promise(r => setTimeout(r, 350));
+    }
 }
 
 // Mock auth login trigger
@@ -669,14 +803,19 @@ function setupDemoPlayer() {
 }
 
 // Image State Variables
-let currentImageFile = null;
-let currentImageObject = null;
+let imageQueue = []; // { id, file, canvas, status, error }
+let activeImageIndex = -1;
+let isBulkImageProcessing = false;
 let imgStudioMode = "auto"; // auto, manual
 let isDrawing = false;
 let strokesHistory = [];
 let maxStrokes = 20;
 let lastX = 0;
 let lastY = 0;
+
+function getActiveImageItem() {
+    return activeImageIndex >= 0 ? imageQueue[activeImageIndex] : null;
+}
 
 // Image DOM Elements
 const tabVideoCleaner = document.getElementById("tab-video-cleaner");
@@ -708,10 +847,14 @@ const imageStatusText = document.getElementById("image-status-text");
 const imageErrorAlert = document.getElementById("image-error-alert");
 const imageErrorMsg = document.getElementById("image-error-msg");
 const imageProgressPanel = document.getElementById("image-progress-panel");
+const imageProgressText = document.getElementById("image-progress-text");
+const imageQueueContainer = document.getElementById("image-queue-container");
 
 const chooseImageBtn = document.getElementById("choose-image-btn");
 const processImageBtn = document.getElementById("process-image-btn");
+const processAllImagesBtn = document.getElementById("process-all-images-btn");
 const downloadImageBtn = document.getElementById("download-image-btn");
+const downloadAllImagesBtn = document.getElementById("download-all-images-btn");
 const clearImageBtn = document.getElementById("clear-image-btn");
 
 function setupEventListeners() {
@@ -724,6 +867,7 @@ function setupEventListeners() {
         navGeminiVideo.addEventListener("click", (e) => {
             e.preventDefault();
             switchStudio("video");
+            document.getElementById('studio')?.scrollIntoView({ behavior: 'smooth' });
         });
     }
 
@@ -758,7 +902,9 @@ function setupEventListeners() {
 
     chooseVideoBtn.addEventListener("click", () => fileInput.click());
     processVideoBtn.addEventListener("click", triggerVideoProcessing);
+    processAllBtn.addEventListener("click", triggerBulkVideoProcessing);
     downloadVideoBtn.addEventListener("click", triggerDownload);
+    downloadAllBtn.addEventListener("click", downloadAllVideos);
     clearQueueBtn.addEventListener("click", () => {
         activeQueue.forEach(item => {
             if (item.sourceUrl) URL.revokeObjectURL(item.sourceUrl);
@@ -773,7 +919,7 @@ function setupEventListeners() {
     imgSubtabManual.addEventListener("click", () => switchImageMode("manual"));
     imageFileInput.addEventListener("change", (e) => {
         if (e.target.files && e.target.files.length > 0) {
-            handleSelectedImage(e.target.files[0]);
+            handleSelectedImages(e.target.files);
         }
     });
 
@@ -789,7 +935,9 @@ function setupEventListeners() {
 
     // Image Actions
     processImageBtn.addEventListener("click", triggerImageProcessing);
+    processAllImagesBtn.addEventListener("click", triggerBulkImageProcessing);
     downloadImageBtn.addEventListener("click", triggerImageDownload);
+    downloadAllImagesBtn.addEventListener("click", downloadAllImages);
     clearImageBtn.addEventListener("click", resetImageState);
 
     // Canvas drawing events
@@ -858,7 +1006,7 @@ function switchImageMode(mode) {
         imgSubtabManual.classList.add("active");
         brushSettingsCard.style.display = "block";
         imageMaskCanvas.style.display = "block";
-        if (currentImageFile) {
+        if (getActiveImageItem()) {
             resizeMaskCanvas();
         }
     }
@@ -885,57 +1033,233 @@ function setupImageDropzone() {
         imageDropzone.style.background = "transparent";
 
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            const file = e.dataTransfer.files[0];
-            if (file.type.startsWith("image/")) {
-                handleSelectedImage(file);
-            } else {
-                showImageError("Please upload a valid image file (PNG or JPG).");
-            }
+            handleSelectedImages(e.dataTransfer.files);
         }
     });
 }
 
-async function handleSelectedImage(file) {
+// Loads one or more image files into the bulk queue (up to 20)
+async function handleSelectedImages(files) {
     imageErrorAlert.style.display = "none";
     imageSuccessAlert.style.display = "none";
-    downloadImageBtn.style.display = "none";
 
-    currentImageFile = file;
-    imageNameText.innerText = file.name;
-    imageDimsText.innerText = `Loading... | ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+    const filtered = Array.from(files).filter(f => f.type.startsWith("image/"));
+    if (filtered.length === 0) {
+        showImageError("Please upload valid image files (PNG, JPG, or WebP).");
+        return;
+    }
 
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-        currentImageObject = img;
-        
-        // Setup canvases
-        imageCanvas.width = img.naturalWidth;
-        imageCanvas.height = img.naturalHeight;
-        const ctx = imageCanvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+    const spaceLeft = MAX_IMAGE_QUEUE_SIZE - imageQueue.length;
+    if (spaceLeft <= 0) {
+        showImageError(`Queue limit of ${MAX_IMAGE_QUEUE_SIZE} images reached. Process or clear some images first.`);
+        return;
+    }
+    if (filtered.length > spaceLeft) {
+        showImageError(`Only ${spaceLeft} more image(s) can be added (max ${MAX_IMAGE_QUEUE_SIZE} at a time). Extra files were skipped.`);
+    }
 
-        imageDimsText.innerText = `${img.naturalWidth} x ${img.naturalHeight} | ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+    const toLoad = filtered.slice(0, spaceLeft);
+    let loadedAny = false;
 
-        // Hide dropzone, show workspace
-        imageDropzone.style.display = "none";
-        imageEditorWorkspace.style.display = "flex";
-        clearImageBtn.style.display = "inline-flex";
+    for (const file of toLoad) {
+        try {
+            const canvas = await loadImageToCanvas(file);
+            imageQueue.push({
+                id: crypto.randomUUID(),
+                file,
+                canvas,
+                status: "ready", // ready, processing, done, error
+                error: null
+            });
+            loadedAny = true;
+        } catch (e) {
+            showImageError(`Failed to load "${file.name}". Make sure it is a valid image.`);
+        }
+    }
 
-        if (imgStudioMode === "manual") {
-            resizeMaskCanvas();
+    if (loadedAny) {
+        if (activeImageIndex === -1) {
+            selectImageItem(0);
+        } else {
+            renderImageQueueList();
+        }
+        imageSuccessAlert.style.display = "flex";
+        imageStatusText.innerText = `${imageQueue.length} image(s) in queue.`;
+        updateProcessImageButtonState();
+    }
+
+    imageFileInput.value = "";
+}
+
+// Decodes an image file into a full-resolution offscreen canvas
+function loadImageToCanvas(file) {
+    return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            canvas.getContext("2d").drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(canvas);
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Image load failed"));
+        };
+        img.src = url;
+    });
+}
+
+// Shows the given queue image in the main editor canvas
+function selectImageItem(index) {
+    if (index < 0 || index >= imageQueue.length) return;
+    activeImageIndex = index;
+    const item = imageQueue[index];
+
+    imageCanvas.width = item.canvas.width;
+    imageCanvas.height = item.canvas.height;
+    imageCanvas.getContext("2d").drawImage(item.canvas, 0, 0);
+
+    imageNameText.innerText = item.file.name;
+    imageDimsText.innerText = `${item.canvas.width} x ${item.canvas.height} | ${(item.file.size / (1024 * 1024)).toFixed(2)} MB`;
+
+    imageDropzone.style.display = "none";
+    imageEditorWorkspace.style.display = "flex";
+    clearImageBtn.style.display = "inline-flex";
+    downloadImageBtn.style.display = item.status === "done" ? "inline-flex" : "none";
+
+    if (imgStudioMode === "manual") {
+        resizeMaskCanvas();
+    }
+
+    if (item.status === "error" && item.error) {
+        showImageError(item.error);
+    } else {
+        imageErrorAlert.style.display = "none";
+    }
+
+    renderImageQueueList();
+    updateProcessImageButtonState();
+}
+
+function renderImageQueueList() {
+    if (imageQueue.length === 0) {
+        imageQueueContainer.style.display = "none";
+        updateImageBulkControls();
+        return;
+    }
+
+    imageQueueContainer.innerHTML = "";
+    imageQueueContainer.style.display = "flex";
+
+    imageQueue.forEach((item, index) => {
+        const qItem = document.createElement("button");
+        qItem.className = `queue-item ${index === activeImageIndex ? 'active' : ''}`;
+        qItem.type = "button";
+        qItem.addEventListener("click", () => selectImageItem(index));
+
+        const detailBox = document.createElement("div");
+        detailBox.className = "queue-details";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "queue-name";
+        nameSpan.innerText = `${index + 1}. ${item.file.name}`;
+
+        const statusSpan = document.createElement("span");
+        statusSpan.className = `queue-status status-${item.status}`;
+
+        if (item.status === "processing") {
+            statusSpan.innerText = "Processing...";
+        } else if (item.status === "done") {
+            statusSpan.innerText = "✓ Done";
+        } else if (item.status === "error") {
+            statusSpan.innerText = "✕ Failed";
+        } else {
+            statusSpan.innerText = "Ready";
         }
 
-        imageSuccessAlert.style.display = "flex";
-        imageStatusText.innerText = "Image loaded successfully.";
-        updateProcessImageButtonState();
-        URL.revokeObjectURL(url);
-    };
-    img.onerror = () => {
-        showImageError("Failed to load image. Make sure it is a valid format.");
-        URL.revokeObjectURL(url);
-    };
-    img.src = url;
+        detailBox.appendChild(nameSpan);
+        detailBox.appendChild(statusSpan);
+        qItem.appendChild(detailBox);
+
+        if (item.status === "done") {
+            const dlBtn = document.createElement("button");
+            dlBtn.className = "queue-dl-btn";
+            dlBtn.title = "Download cleaned PNG";
+            dlBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            `;
+            dlBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                downloadImageItem(item);
+            });
+            qItem.appendChild(dlBtn);
+        }
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "queue-remove-btn";
+        removeBtn.title = "Remove from queue";
+        removeBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            </svg>
+        `;
+        removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            removeImageQueueItem(index);
+        });
+
+        qItem.appendChild(removeBtn);
+        imageQueueContainer.appendChild(qItem);
+    });
+
+    updateImageBulkControls();
+}
+
+function updateImageBulkControls() {
+    const pendingCount = imageQueue.filter(i => i.status === "ready" || i.status === "error").length;
+    const doneCount = imageQueue.filter(i => i.status === "done").length;
+
+    if (pendingCount > 1 && !isBulkImageProcessing) {
+        processAllImagesBtn.style.display = "inline-flex";
+        document.getElementById("process-all-images-btn-text").innerText = `Auto Clean All (${pendingCount})`;
+    } else if (!isBulkImageProcessing) {
+        processAllImagesBtn.style.display = "none";
+    }
+
+    if (doneCount > 1) {
+        downloadAllImagesBtn.style.display = "inline-flex";
+        document.getElementById("download-all-images-btn-text").innerText = `Download All (${doneCount})`;
+    } else {
+        downloadAllImagesBtn.style.display = "none";
+    }
+}
+
+function removeImageQueueItem(index) {
+    const item = imageQueue[index];
+    if (isBulkImageProcessing || (item && item.status === "processing")) return;
+
+    imageQueue.splice(index, 1);
+
+    if (imageQueue.length === 0) {
+        resetImageState();
+        return;
+    }
+
+    if (index === activeImageIndex) {
+        selectImageItem(Math.max(0, index - 1));
+    } else {
+        if (index < activeImageIndex) activeImageIndex--;
+        renderImageQueueList();
+    }
 }
 
 function resizeMaskCanvas() {
@@ -947,7 +1271,8 @@ function resizeMaskCanvas() {
 }
 
 function updateProcessImageButtonState() {
-    if (!currentImageObject) {
+    const item = getActiveImageItem();
+    if (!item || isBulkImageProcessing || item.status === "processing") {
         processImageBtn.disabled = true;
         return;
     }
@@ -992,7 +1317,7 @@ function getCanvasCoords(e, canvas) {
 
 function setupDrawingCanvas() {
     const drawStart = (e) => {
-        if (!currentImageObject || imgStudioMode !== "manual") return;
+        if (!getActiveImageItem() || imgStudioMode !== "manual") return;
         e.preventDefault();
         
         isDrawing = true;
@@ -1007,7 +1332,7 @@ function setupDrawingCanvas() {
     };
 
     const drawMove = (e) => {
-        if (!currentImageObject || imgStudioMode !== "manual") return;
+        if (!getActiveImageItem() || imgStudioMode !== "manual") return;
         
         const coords = getCanvasCoords(e, imageMaskCanvas);
 
@@ -1052,7 +1377,7 @@ function setupDrawingCanvas() {
     
     // Manage brush cursor mouseenter/mouseleave
     imageMaskCanvas.addEventListener("mouseenter", () => {
-        if (currentImageObject && imgStudioMode === "manual") {
+        if (getActiveImageItem() && imgStudioMode === "manual") {
             brushCursor.style.display = "block";
         }
     });
@@ -1101,8 +1426,40 @@ function drawLine(x1, y1, x2, y2) {
     ctx.stroke();
 }
 
+// Auto-cleans one queued image on its own canvas (used by single & bulk flows)
+async function processImageItem(index) {
+    const item = imageQueue[index];
+
+    ensureCreditsAvailable();
+
+    item.status = "processing";
+    item.error = null;
+    renderImageQueueList();
+    updateProcessImageButtonState();
+
+    // Allow UI thread to update
+    await new Promise(r => setTimeout(r, 30));
+
+    const detectedWatermark = await cleanImageWatermarkAuto(item.canvas, null, imageOpacityMode);
+    if (detectedWatermark) {
+        console.log("Watermark auto-cleaned at location:", detectedWatermark.x, detectedWatermark.y);
+    }
+
+    item.status = "done";
+    incrementCreditsUsage();
+
+    if (index === activeImageIndex) {
+        imageCanvas.getContext("2d").drawImage(item.canvas, 0, 0);
+        downloadImageBtn.style.display = "inline-flex";
+    }
+
+    renderImageQueueList();
+}
+
+// Processes the currently selected image (auto or manual mode)
 async function triggerImageProcessing() {
-    if (!currentImageObject) return;
+    const item = getActiveImageItem();
+    if (!item || isBulkImageProcessing || item.status === "processing") return;
     
     // Check agree checkbox
     if (!imgAgreeCheckbox.checked) {
@@ -1110,67 +1467,127 @@ async function triggerImageProcessing() {
         return;
     }
 
-    // Check credits
-    if (!isPremium) {
-        const remaining = isLoggedIn ? 6 - getUsedCreditsCount() : 3 - getUsedCreditsCount();
-        if (remaining <= 0) {
-            showImageError("Daily credit limit reached. Please upgrade to Premium.");
-            return;
-        }
-    }
-
     try {
         imageSuccessAlert.style.display = "none";
         imageErrorAlert.style.display = "none";
         imageProgressPanel.style.display = "flex";
+        imageProgressText.innerText = "Cleaning Watermark...";
         disableImageControls(true);
 
         // Allow UI thread to update
         await new Promise(r => setTimeout(r, 100));
 
         if (imgStudioMode === "auto") {
-            const detectedWatermark = await cleanImageWatermarkAuto(imageCanvas, (prog) => {
-                // simple progress feedback
-            }, imageOpacityMode);
-            if (detectedWatermark) {
-                console.log("Watermark auto-cleaned at location:", detectedWatermark.x, detectedWatermark.y);
-            }
+            await processImageItem(activeImageIndex);
         } else {
-            cleanImageWatermarkManual(imageCanvas, imageMaskCanvas, (prog) => {
-                // simple progress feedback
-            });
+            ensureCreditsAvailable();
+
+            item.status = "processing";
+            item.error = null;
+            renderImageQueueList();
+            await new Promise(r => setTimeout(r, 30));
+
+            cleanImageWatermarkManual(item.canvas, imageMaskCanvas, null);
             clearDrawingMask();
+
+            item.status = "done";
+            incrementCreditsUsage();
+
+            imageCanvas.getContext("2d").drawImage(item.canvas, 0, 0);
+            downloadImageBtn.style.display = "inline-flex";
+            renderImageQueueList();
         }
 
         imageProgressPanel.style.display = "none";
         imageSuccessAlert.style.display = "flex";
         imageStatusText.innerText = "Watermark cleaned successfully!";
-        downloadImageBtn.style.display = "inline-flex";
         disableImageControls(false);
 
-        incrementCreditsUsage();
         updateCreditsUI();
+        updateProcessImageButtonState();
     } catch (err) {
         console.error("Image processing failed:", err);
-        showImageError(err.message || "Failed to process image.");
+        item.status = err.creditsExhausted ? "ready" : "error";
+        item.error = err.message || "Failed to process image.";
+        showImageError(item.error);
         imageProgressPanel.style.display = "none";
         disableImageControls(false);
+        renderImageQueueList();
+        updateProcessImageButtonState();
+    }
+}
+
+// Bulk: auto-cleans every pending image in the queue sequentially (up to 20)
+async function triggerBulkImageProcessing() {
+    if (isBulkImageProcessing) return;
+
+    // Check agree checkbox
+    if (!imgAgreeCheckbox.checked) {
+        showImageError("Please confirm that you own this media or have permission to edit it.");
+        return;
+    }
+
+    const pendingIndexes = imageQueue
+        .map((item, i) => (item.status === "ready" || item.status === "error") ? i : -1)
+        .filter(i => i !== -1);
+
+    if (pendingIndexes.length === 0) return;
+
+    isBulkImageProcessing = true;
+    imageSuccessAlert.style.display = "none";
+    imageErrorAlert.style.display = "none";
+    imageProgressPanel.style.display = "flex";
+    disableImageControls(true);
+
+    let processedCount = 0;
+    let failedCount = 0;
+
+    for (let n = 0; n < pendingIndexes.length; n++) {
+        const idx = pendingIndexes[n];
+        imageProgressText.innerText = `Cleaning image ${n + 1}/${pendingIndexes.length}...`;
+        try {
+            await processImageItem(idx);
+            processedCount++;
+        } catch (err) {
+            console.error("Bulk image processing failed:", err);
+            const item = imageQueue[idx];
+            if (err.creditsExhausted) {
+                item.status = "ready";
+                showImageError(`Daily credit limit reached after ${processedCount} image(s). Upgrade to Premium for unlimited processing.`);
+                break;
+            }
+            item.status = "error";
+            item.error = err.message || "Processing failed.";
+            failedCount++;
+        }
+    }
+
+    isBulkImageProcessing = false;
+    imageProgressPanel.style.display = "none";
+    disableImageControls(false);
+    renderImageQueueList();
+    updateCreditsUI();
+    updateProcessImageButtonState();
+
+    if (processedCount > 0) {
+        imageSuccessAlert.style.display = "flex";
+        imageStatusText.innerText = `Bulk cleaning finished: ${processedCount} cleaned${failedCount ? `, ${failedCount} failed` : ""}.`;
     }
 }
 
 function disableImageControls(disable) {
     chooseImageBtn.disabled = disable;
     processImageBtn.disabled = disable;
+    processAllImagesBtn.disabled = disable;
+    downloadAllImagesBtn.disabled = disable;
     clearImageBtn.disabled = disable;
     btnUndoDraw.disabled = disable;
     btnClearMask.disabled = disable;
 }
 
-function triggerImageDownload() {
-    if (!currentImageObject) return;
-    
-    const cleanedName = currentImageFile.name.replace(/\.[^/.]+$/, "") + "-cleaned.png";
-    const dataUrl = imageCanvas.toDataURL("image/png");
+function downloadImageItem(item) {
+    const cleanedName = item.file.name.replace(/\.[^/.]+$/, "") + "-cleaned.png";
+    const dataUrl = item.canvas.toDataURL("image/png");
     
     const link = document.createElement("a");
     link.href = dataUrl;
@@ -1178,9 +1595,25 @@ function triggerImageDownload() {
     link.click();
 }
 
+function triggerImageDownload() {
+    const item = getActiveImageItem();
+    if (!item) return;
+    downloadImageItem(item);
+}
+
+// Downloads every cleaned image in the queue
+async function downloadAllImages() {
+    const doneItems = imageQueue.filter(item => item.status === "done");
+    for (const item of doneItems) {
+        downloadImageItem(item);
+        // Small delay so browsers don't drop successive downloads
+        await new Promise(r => setTimeout(r, 350));
+    }
+}
+
 function resetImageState() {
-    currentImageFile = null;
-    currentImageObject = null;
+    imageQueue = [];
+    activeImageIndex = -1;
     strokesHistory = [];
     
     imageDropzone.style.display = "flex";
@@ -1188,7 +1621,11 @@ function resetImageState() {
     imageSuccessAlert.style.display = "none";
     imageErrorAlert.style.display = "none";
     downloadImageBtn.style.display = "none";
+    downloadAllImagesBtn.style.display = "none";
+    processAllImagesBtn.style.display = "none";
     clearImageBtn.style.display = "none";
+    imageQueueContainer.style.display = "none";
+    imageQueueContainer.innerHTML = "";
     
     imageFileInput.value = "";
     

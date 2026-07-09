@@ -1,0 +1,38 @@
+- generic [ref=f6e2]:
+  - banner [ref=f6e3]:
+    - generic [ref=f6e4]: VeoClean
+    - link "← Gemini Remover" [ref=f6e5] [cursor=pointer]:
+      - /url: index.html
+  - heading "Remove the Veo watermark from your videos" [level=1] [ref=f6e6]:
+    - text: Remove the
+    - emphasis [ref=f6e7]: Veo
+    - text: watermark from your videos
+  - paragraph [ref=f6e8]: Clean the "Veo" text mark from videos you generated with Veo / Flow — fully in your browser. Nothing is uploaded, the video is decoded, cleaned frame by frame, and re-encoded locally at high bitrate. No blur, no quality loss.
+  - generic [ref=f6e9]:
+    - generic [ref=f6e10] [cursor=pointer]:
+      - generic [ref=f6e11]: 🎬
+      - heading "Drop your Veo MP4 here or click to browse" [level=3] [ref=f6e12]
+      - paragraph [ref=f6e13]: 720p · 1080p · 4K — landscape 16:9 or portrait 9:16
+    - generic [ref=f6e14]:
+      - generic [ref=f6e15]: ℹ️
+      - generic [ref=f6e16]: Original files only. Upload the MP4 downloaded directly from Veo / Flow (labs.google). Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.
+    - generic [ref=f6e17]:
+      - checkbox "I own this media or have permission to edit it. I will not remove third-party copyright marks or creator credits." [checked] [ref=f6e18]
+      - generic [ref=f6e19]: I own this media or have permission to edit it. I will not remove third-party copyright marks or creator credits.
+    - generic [ref=f6e20]:
+      - button "Remove Veo Watermark" [ref=f6e21] [cursor=pointer]
+      - generic [ref=f6e35]: veo.mp4 · 1280 x 720 · 2.90 MB
+  - generic [ref=f6e36]:
+    - heading "Original" [level=4] [ref=f6e38]
+    - heading "Cleaned" [level=4] [ref=f6e41]
+  - generic [ref=f6e24]:
+    - generic [ref=f6e25]:
+      - generic [ref=f6e26]: 01 · Upload
+      - paragraph [ref=f6e27]: Pick the original Veo MP4. It stays on your device — everything runs locally with WebCodecs.
+    - generic [ref=f6e28]:
+      - generic [ref=f6e29]: 02 · Auto-detect
+      - paragraph [ref=f6e30]: The "Veo" text mark is located in the bottom-right corner and its opacity is estimated per video.
+    - generic [ref=f6e31]:
+      - generic [ref=f6e32]: 03 · Download
+      - paragraph [ref=f6e33]: The mark is unblended pixel-exact and the video re-encoded at high bitrate. Save the clean MP4.
+  - contentinfo [ref=f6e34]: Runs entirely in Chrome / Edge with WebCodecs. For media you own or are authorised to edit only.

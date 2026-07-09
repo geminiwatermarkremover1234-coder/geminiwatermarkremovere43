@@ -1,0 +1,4 @@
+[     138ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8412/favicon.ico:0
+[  105600ms] [ERROR] Veo processing failed: TypeError: Cannot read properties of undefined (reading 'createFile')
+    at processVideoWatermark (http://localhost:8412/processor.js?v=12:1118:32)
+    at HTMLButtonElement.run (http://localhost:8412/veo-app.js?v=1:118:28) @ http://localhost:8412/veo-app.js?v=1:133

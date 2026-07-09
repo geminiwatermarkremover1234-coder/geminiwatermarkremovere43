@@ -1,0 +1,8 @@
+[   63920ms] [ERROR] Frame processing error: Error: No Gemini watermark detected in this video. Videos re-encoded by WhatsApp, Telegram, or social media cannot be cleaned reliably. Please upload the original MP4 downloaded directly from Gemini.
+    at lockWatermarkAndFlush (http://localhost:8412/processor.js?v=12:1337:19)
+    at processFrame (http://localhost:8412/processor.js?v=12:1389:17)
+    at output (http://localhost:8412/processor.js?v=12:1430:17) @ http://localhost:8412/processor.js?v=12:1432
+[   66535ms] [ERROR] Veo processing failed: Error: No Gemini watermark detected in this video. Videos re-encoded by WhatsApp, Telegram, or social media cannot be cleaned reliably. Please upload the original MP4 downloaded directly from Gemini.
+    at lockWatermarkAndFlush (http://localhost:8412/processor.js?v=12:1337:19)
+    at processFrame (http://localhost:8412/processor.js?v=12:1389:17)
+    at output (http://localhost:8412/processor.js?v=12:1430:17) @ http://localhost:8412/veo-app.js?v=2:133

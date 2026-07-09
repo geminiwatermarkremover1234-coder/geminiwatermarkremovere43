@@ -1,0 +1,379 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - generic [ref=f4e3]:
+      - link "Lumina AI" [ref=f4e5] [cursor=pointer]:
+        - /url: "#"
+      - button "menu" [ref=f4e7] [cursor=pointer]:
+        - generic [ref=f4e8]: menu
+  - generic [ref=f4e9]:
+    - generic [ref=f4e10]:
+      - generic [ref=f4e11]: Lumina AI
+      - button "close" [ref=f4e12] [cursor=pointer]:
+        - generic [ref=f4e13]: close
+    - navigation [ref=f4e14]:
+      - link "Tools" [ref=f4e15] [cursor=pointer]:
+        - /url: "#"
+      - link "Video Remover" [ref=f4e16] [cursor=pointer]:
+        - /url: "#studio"
+      - link "Pricing" [ref=f4e17] [cursor=pointer]:
+        - /url: "#pricing-tag"
+      - link "API" [ref=f4e18] [cursor=pointer]:
+        - /url: "#faq-tag"
+    - generic [ref=f4e19]:
+      - button "Sign In" [ref=f4e20] [cursor=pointer]
+      - button "Get Started" [ref=f4e21] [cursor=pointer]
+  - main [ref=f4e22]:
+    - generic [ref=f4e26]:
+      - generic [ref=f4e29]: Now processing 100% locally
+      - heading "Free Video Watermark Remover for Gemini and Veo 3" [level=1] [ref=f4e30]
+      - paragraph [ref=f4e31]: Remove supported Gemini video watermarks without uploading your file. Clean short Gemini and Veo 3 clips locally in Chrome or Edge, then download a clean MP4.
+    - generic [ref=f4e33]:
+      - generic [ref=f4e35]:
+        - button "image Images" [ref=f4e36] [cursor=pointer]:
+          - generic [ref=f4e37]: image
+          - text: Images
+        - button "movie Videos Beta" [ref=f4e38] [cursor=pointer]:
+          - generic [ref=f4e39]: movie
+          - text: Videos
+          - generic [ref=f4e40]: Beta
+      - generic [ref=f4e41]:
+        - generic [ref=f4e42]:
+          - generic [ref=f4e43]:
+            - generic [ref=f4e44]: dashboard
+            - generic [ref=f4e45]: Gemini Omni Video Cleaner
+          - generic [ref=f4e46]:
+            - img [ref=f4e47]
+            - generic [ref=f4e49]: "Free mode: 2/3 daily videos left"
+        - generic [ref=f4e50]:
+          - generic [ref=f4e52] [cursor=pointer]:
+            - generic [ref=f4e53]: cloud_upload
+            - heading "Upload a 720p, 1080p, or 4K Gemini video" [level=3] [ref=f4e54]
+            - paragraph [ref=f4e55]: Landscape and portrait. Drag & drop or click to upload.
+            - paragraph [ref=f4e56]:
+              - strong [ref=f4e57]: "Note:"
+              - text: Upload the original MP4 downloaded directly from Gemini. Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.
+          - generic [ref=f4e58]:
+            - generic [ref=f4e59]:
+              - generic [ref=f4e60]: Video Queue
+              - generic [ref=f4e61]: No video selected
+            - generic [ref=f4e62]:
+              - generic [ref=f4e63]:
+                - generic [ref=f4e64]: Daily Credits
+                - generic [ref=f4e65]: 2 / 3 left
+              - paragraph [ref=f4e68]:
+                - text: "Guest limit: 3/day."
+                - link "Sign in" [ref=f4e69] [cursor=pointer]:
+                  - /url: "#"
+                - text: to get 6.
+            - generic [ref=f4e70]:
+              - generic [ref=f4e71]: Watermark Opacity
+              - generic [ref=f4e72]:
+                - button "Auto" [ref=f4e73] [cursor=pointer]
+                - button "Soft" [ref=f4e74] [cursor=pointer]
+                - button "Normal" [ref=f4e75] [cursor=pointer]
+            - generic [ref=f4e77] [cursor=pointer]:
+              - checkbox "I agree — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information." [ref=f4e78]
+              - generic [ref=f4e79]:
+                - strong [ref=f4e80]: I agree
+                - text: — I confirm that I own this media or have permission to edit it. I will not remove, hide, alter, or bypass third-party copyright marks, creator credits, platform marks, ownership information, or rights management information.
+            - generic [ref=f4e81]:
+              - button "cloud_upload Choose Video" [ref=f4e82] [cursor=pointer]:
+                - generic [ref=f4e83]: cloud_upload
+                - generic [ref=f4e84]: Choose Video
+              - button "shield Remove From Selected" [disabled]:
+                - generic: shield
+                - generic: Remove From Selected
+            - generic [ref=f4e85]:
+              - generic [ref=f4e86]: 👑 Premium
+              - paragraph [ref=f4e87]: Process multiple videos simultaneously and download all results in a single ZIP.
+              - button "Upgrade to Premium" [ref=f4e88] [cursor=pointer]
+            - paragraph [ref=f4e89]: Processing happens on your device. Export uses H.264 MP4.
+    - generic [ref=f4e91]:
+      - generic [ref=f4e92]:
+        - generic [ref=f4e93]: verified_user
+        - paragraph [ref=f4e94]: Privacy First
+        - paragraph [ref=f4e95]: Runs in your browser — no upload needed
+      - generic [ref=f4e96]:
+        - generic [ref=f4e97]: bolt
+        - paragraph [ref=f4e98]: Ultra Fast
+        - paragraph [ref=f4e99]: ~1s per 1MP image on a modern laptop
+      - generic [ref=f4e100]:
+        - generic [ref=f4e101]: target
+        - paragraph [ref=f4e102]: Pixel Perfect
+        - paragraph [ref=f4e103]: Matches original texture and noise
+    - generic [ref=f4e104]:
+      - heading "Best practices for using the Gemini watermark remover" [level=2] [ref=f4e106]
+      - generic [ref=f4e107]:
+        - generic [ref=f4e108]:
+          - generic [ref=f4e109]: "1"
+          - generic [ref=f4e110]:
+            - heading "Start with original files" [level=3] [ref=f4e111]
+            - paragraph [ref=f4e112]: Upload directly from Gemini, Veo, or AI Studio. Screenshots and re-compressed versions reduce removal accuracy.
+        - generic [ref=f4e113]:
+          - generic [ref=f4e114]: "2"
+          - generic [ref=f4e115]:
+            - heading "Higher resolution = better results" [level=3] [ref=f4e116]
+            - paragraph [ref=f4e117]: Files at original Gemini resolution produce cleaner edges around the logo than heavily compressed copies.
+        - generic [ref=f4e118]:
+          - generic [ref=f4e119]: "3"
+          - generic [ref=f4e120]:
+            - heading "Use the original format" [level=3] [ref=f4e121]
+            - paragraph [ref=f4e122]: Export as the format Gemini gave you (PNG for stills, MP4 for Veo) so nothing is re-encoded before removal.
+        - generic [ref=f4e123]:
+          - generic [ref=f4e124]: "4"
+          - generic [ref=f4e125]:
+            - heading "Re-run after new releases" [level=3] [ref=f4e126]
+            - paragraph [ref=f4e127]: Google occasionally tweaks the logo placement. We update our detection within days of each model release.
+    - generic [ref=f4e128]:
+      - generic [ref=f4e129]:
+        - generic [ref=f4e130]:
+          - generic [ref=f4e131]: payments
+          - generic [ref=f4e132]: Simple, transparent pricing
+        - heading "Plans & Pricing" [level=2] [ref=f4e133]
+        - paragraph [ref=f4e134]: Choose the plan that fits your workflow. Start free, upgrade when you're ready.
+      - generic [ref=f4e136]:
+        - generic [ref=f4e137]: USD
+        - generic [ref=f4e140]: INR
+      - generic [ref=f4e141]:
+        - generic [ref=f4e142] [cursor=pointer]:
+          - heading "Starter" [level=3] [ref=f4e143]
+          - generic [ref=f4e144]:
+            - generic [ref=f4e145]: $0
+            - generic [ref=f4e146]: /mo
+          - paragraph [ref=f4e147]: Perfect for individuals exploring watermark removal with basic daily limits.
+          - button "Try for free" [ref=f4e148]
+          - list [ref=f4e149]:
+            - listitem [ref=f4e150]:
+              - generic [ref=f4e151]: check_circle
+              - text: 3 images per day
+            - listitem [ref=f4e152]:
+              - generic [ref=f4e153]: check_circle
+              - text: 3 videos per day
+            - listitem [ref=f4e154]:
+              - generic [ref=f4e155]: check_circle
+              - text: Auto watermark detection
+            - listitem [ref=f4e156]:
+              - generic [ref=f4e157]: check_circle
+              - text: Browser-local processing
+        - generic [ref=f4e158] [cursor=pointer]:
+          - generic [ref=f4e159]:
+            - generic [ref=f4e160]: bolt
+            - text: Most Recommended
+          - heading "Professional" [level=3] [ref=f4e161]
+          - generic [ref=f4e162]:
+            - generic [ref=f4e163]: $12
+            - generic [ref=f4e164]: /mo
+          - paragraph [ref=f4e165]: Built for creators who need speed, bulk processing, and real-time collaboration.
+          - button "Try for free" [ref=f4e166]
+          - list [ref=f4e167]:
+            - listitem [ref=f4e168]:
+              - generic [ref=f4e169]: check_circle
+              - text: Unlimited images
+            - listitem [ref=f4e170]:
+              - generic [ref=f4e171]: check_circle
+              - text: Unlimited videos
+            - listitem [ref=f4e172]:
+              - generic [ref=f4e173]: check_circle
+              - text: Priority support
+            - listitem [ref=f4e174]:
+              - generic [ref=f4e175]: check_circle
+              - text: CLI & SDK access
+        - generic [ref=f4e176] [cursor=pointer]:
+          - heading "Enterprise" [level=3] [ref=f4e177]
+          - generic [ref=f4e178]:
+            - generic [ref=f4e179]: $200
+            - generic [ref=f4e180]: /mo
+          - paragraph [ref=f4e181]: Full power, customization, and dedicated support for your organization.
+          - button "Get started" [ref=f4e182]
+          - list [ref=f4e183]:
+            - listitem [ref=f4e184]:
+              - generic [ref=f4e185]: check_circle
+              - text: Unlimited everything
+            - listitem [ref=f4e186]:
+              - generic [ref=f4e187]: check_circle
+              - text: Custom API integration
+            - listitem [ref=f4e188]:
+              - generic [ref=f4e189]: check_circle
+              - text: Custom workflows
+            - listitem [ref=f4e190]:
+              - generic [ref=f4e191]: check_circle
+              - text: Dedicated account manager
+    - generic [ref=f4e193]:
+      - heading "The only Gemini logo remover that works on video and image" [level=2] [ref=f4e194]
+      - table [ref=f4e196]:
+        - rowgroup [ref=f4e197]:
+          - row "Capability Other tools auto_awesome Lumina AI" [ref=f4e198]:
+            - columnheader "Capability" [ref=f4e199]
+            - columnheader "Other tools" [ref=f4e200]
+            - columnheader "auto_awesome Lumina AI" [ref=f4e201]:
+              - generic [ref=f4e202]: auto_awesome
+              - text: Lumina AI
+        - rowgroup [ref=f4e203]:
+          - row "Image logo removal ~ check" [ref=f4e204]:
+            - cell "Image logo removal" [ref=f4e205]
+            - cell "~" [ref=f4e206]
+            - cell "check" [ref=f4e207]:
+              - generic [ref=f4e208]: check
+          - row "Video logo removal ✕ check" [ref=f4e209]:
+            - cell "Video logo removal" [ref=f4e210]
+            - cell "✕" [ref=f4e211]
+            - cell "check" [ref=f4e212]:
+              - generic [ref=f4e213]: check
+          - row "Removes from every frame ✕ check" [ref=f4e214]:
+            - cell "Removes from every frame" [ref=f4e215]
+            - cell "✕" [ref=f4e216]
+            - cell "check" [ref=f4e217]:
+              - generic [ref=f4e218]: check
+          - row "Local processing ~ check" [ref=f4e219]:
+            - cell "Local processing" [ref=f4e220]
+            - cell "~" [ref=f4e221]
+            - cell "check" [ref=f4e222]:
+              - generic [ref=f4e223]: check
+          - row "No signup to start ~ check" [ref=f4e224]:
+            - cell "No signup to start" [ref=f4e225]
+            - cell "~" [ref=f4e226]
+            - cell "check" [ref=f4e227]:
+              - generic [ref=f4e228]: check
+          - row "Price Paid Free" [ref=f4e229]:
+            - cell "Price" [ref=f4e230]
+            - cell "Paid" [ref=f4e231]
+            - cell "Free" [ref=f4e232]
+      - paragraph [ref=f4e233]: Most tools only touch stills. We lift the Gemini & Veo logo from images and video, for free.
+    - generic [ref=f4e234]:
+      - generic [ref=f4e235]:
+        - heading "Complete AI Toolkit" [level=2] [ref=f4e236]
+        - paragraph [ref=f4e237]: Advanced restoration algorithms for any professional workflow.
+      - generic [ref=f4e238]:
+        - generic [ref=f4e239]:
+          - generic [ref=f4e240]: magic_button
+          - generic [ref=f4e241]:
+            - heading "Reverse alpha blending" [level=3] [ref=f4e242]
+            - paragraph [ref=f4e243]: Uses calibrated alpha maps to reconstruct pixels under the watermark — no model repaint, no soft edges.
+        - generic [ref=f4e244]:
+          - generic [ref=f4e245]: star
+          - generic [ref=f4e246]:
+            - heading "All Gemini variants" [level=3] [ref=f4e247]
+            - paragraph [ref=f4e248]: Handles logo marks, star overlays, and Nano Banana watermark variants in supported image outputs.
+        - generic [ref=f4e249]:
+          - generic [ref=f4e250]: content_copy
+          - generic [ref=f4e251]:
+            - heading "Bulk parallel processing" [level=3] [ref=f4e252]
+            - paragraph [ref=f4e253]: Drop multiple images, process in parallel in-browser, download individually or as ZIP.
+        - generic [ref=f4e254]:
+          - generic [ref=f4e255]: verified_user
+          - generic [ref=f4e256]:
+            - heading "100% browser-local" [level=3] [ref=f4e257]
+            - paragraph [ref=f4e258]: All computation stays in your browser. Images never leave your device.
+        - generic [ref=f4e259]:
+          - generic [ref=f4e260]: image
+          - generic [ref=f4e261]:
+            - heading "All formats & resolutions" [level=3] [ref=f4e262]
+            - paragraph [ref=f4e263]: Accepts JPG, PNG, and WebP input at any resolution. Exports lossless PNG.
+        - generic [ref=f4e264]:
+          - generic [ref=f4e265]: extension
+          - generic [ref=f4e266]:
+            - heading "Chrome extension" [level=3] [ref=f4e267]
+            - paragraph [ref=f4e268]: Install once and Gemini pages auto-replace previews with clean versions.
+        - generic [ref=f4e269]:
+          - generic [ref=f4e270]: terminal
+          - generic [ref=f4e271]:
+            - heading "CLI & SDK" [level=3] [ref=f4e272]
+            - paragraph [ref=f4e273]: Supports image batches, CI/CD integration, and local video cleanup for developers.
+        - generic [ref=f4e274]:
+          - generic [ref=f4e275]: laptop_mac
+          - generic [ref=f4e276]:
+            - heading "Cross-platform" [level=3] [ref=f4e277]
+            - paragraph [ref=f4e278]: Works on major browsers and mobile. CLI covers Windows, macOS, and Linux.
+        - generic [ref=f4e279]:
+          - generic [ref=f4e280]: code
+          - generic [ref=f4e281]:
+            - heading "Free & Open Source" [level=3] [ref=f4e282]
+            - paragraph [ref=f4e283]: MIT licensed, no usage limits, no account required. 4.6k+ GitHub Stars.
+    - generic [ref=f4e285]:
+      - generic [ref=f4e286]:
+        - heading "Three Steps to Clean" [level=2] [ref=f4e287]
+        - paragraph [ref=f4e288]: Simple enough for everyone, powerful enough for the pros.
+      - generic [ref=f4e289]:
+        - generic [ref=f4e290]:
+          - generic [ref=f4e291]: "1"
+          - heading "Upload Photos" [level=4] [ref=f4e292]
+          - paragraph [ref=f4e293]: Drag or select watermarked images. Batch processing supported.
+        - generic [ref=f4e294]:
+          - generic [ref=f4e295]: "2"
+          - heading "AI Auto-Removal" [level=4] [ref=f4e296]
+          - paragraph [ref=f4e297]: Lumina detects overlays and restores pixels instantly. All processing stays local.
+        - generic [ref=f4e298]:
+          - generic [ref=f4e299]: "3"
+          - heading "Download Clean" [level=4] [ref=f4e300]
+          - paragraph [ref=f4e301]: Get your high-res, watermark-free images as PNGs. One by one or as a ZIP.
+    - generic [ref=f4e303]:
+      - generic [ref=f4e304]:
+        - generic [ref=f4e305]: Video Demonstration
+        - heading "How to use the Gemini Video Watermark Remover" [level=2] [ref=f4e306]
+        - paragraph [ref=f4e307]: Watch our quick demo showcasing the frame-by-frame logo cleanup, local processing capabilities, and instant MP4 downloads.
+        - list [ref=f4e308]:
+          - listitem [ref=f4e309]:
+            - generic [ref=f4e310]: "01"
+            - generic [ref=f4e311]: Choose a supported 720p, 1080p, or 4K Gemini video from your device.
+          - listitem [ref=f4e312]:
+            - generic [ref=f4e313]: "02"
+            - generic [ref=f4e314]: Run the remover and keep this tab open while local processing finishes.
+          - listitem [ref=f4e315]:
+            - generic [ref=f4e316]: "03"
+            - generic [ref=f4e317]: Download the cleaned MP4 file and review the corner area.
+      - generic [ref=f4e318] [cursor=pointer]:
+        - img "Gemini Omni Video Watermark Remover Demo" [ref=f4e319]
+        - img [ref=f4e322]
+    - generic [ref=f4e325]:
+      - heading "Frequently Asked Questions" [level=2] [ref=f4e326]
+      - generic [ref=f4e327]:
+        - generic [ref=f4e328]:
+          - button "Is Lumina AI completely free? expand_more" [ref=f4e329] [cursor=pointer]:
+            - generic [ref=f4e330]: Is Lumina AI completely free?
+            - generic [ref=f4e331]: expand_more
+          - paragraph [ref=f4e332]: Yes — completely free, no limits, no sign-up. Lumina is built as an open-source tool for the creative community.
+        - generic [ref=f4e333]:
+          - button "Are my photos uploaded to a server? expand_more" [ref=f4e334] [cursor=pointer]:
+            - generic [ref=f4e335]: Are my photos uploaded to a server?
+            - generic [ref=f4e336]: expand_more
+          - paragraph [ref=f4e337]: Never. Lumina uses WebCodecs and Canvas APIs to run processing directly in your browser. Your data never leaves your device.
+        - generic [ref=f4e338]:
+          - button "Does it work on videos too? expand_more" [ref=f4e339] [cursor=pointer]:
+            - generic [ref=f4e340]: Does it work on videos too?
+            - generic [ref=f4e341]: expand_more
+          - paragraph [ref=f4e342]: Yes! Our tool supports short video clips from Gemini Omni and Veo 3. For large files or production pipelines, our CLI tool is recommended.
+        - generic [ref=f4e343]:
+          - button "What video dimensions are supported? expand_more" [ref=f4e344] [cursor=pointer]:
+            - generic [ref=f4e345]: What video dimensions are supported?
+            - generic [ref=f4e346]: expand_more
+          - paragraph [ref=f4e347]: This tool supports 16:9 and 9:16 videos at 720p (1280×720, 720×1280), 1080p (1920×1080, 1080×1920), and 4K UHD (3840×2160, 2160×3840). 1080p and 4K support is experimental.
+        - generic [ref=f4e348]:
+          - button "Does this remove invisible watermarking? expand_more" [ref=f4e349] [cursor=pointer]:
+            - generic [ref=f4e350]: Does this remove invisible watermarking?
+            - generic [ref=f4e351]: expand_more
+          - paragraph [ref=f4e352]: No. This tool targets the visible corner logo only. It does not remove invisible watermarking, metadata, or provenance signals.
+    - generic [ref=f4e354]:
+      - heading "Ready to scale your production?" [level=2] [ref=f4e355]
+      - paragraph [ref=f4e356]: Join thousands of creators using Lumina to clean their digital assets locally and securely.
+      - generic [ref=f4e357]:
+        - button "Get Started Now rocket_launch" [ref=f4e358] [cursor=pointer]:
+          - text: Get Started Now
+          - generic [ref=f4e359]: rocket_launch
+        - button "Contact Us" [ref=f4e360] [cursor=pointer]
+  - contentinfo [ref=f4e361]:
+    - generic [ref=f4e362]:
+      - generic [ref=f4e363]:
+        - generic [ref=f4e364]: Lumina AI
+        - paragraph [ref=f4e365]:
+          - text: © 2026 Gemini Watermark Remover. All rights reserved.
+          - text: Private browser-based image/video cleaning.
+      - generic [ref=f4e366]:
+        - link "Documentation" [ref=f4e367] [cursor=pointer]:
+          - /url: "#"
+        - link "Privacy Policy" [ref=f4e368] [cursor=pointer]:
+          - /url: "#"
+        - link "Support" [ref=f4e369] [cursor=pointer]:
+          - /url: "#"
+        - link "GitHub" [ref=f4e370] [cursor=pointer]:
+          - /url: "#"
+    - paragraph [ref=f4e372]: "Disclaimer: This product is an independent educational tool. It is not affiliated with, sponsored by, or associated with Google or Gemini."

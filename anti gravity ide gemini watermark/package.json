@@ -4,7 +4,9 @@
   "description": "Fully client-side browser application to remove visible corner watermark logos from Gemini Omni/Veo videos using WebCodecs.",
   "main": "app.js",
   "scripts": {
-    "dev": "npx -y http-server -p 3000 -c-1"
+    "dev": "npx -y http-server -p 3000 -c-1",
+    "cert": "npx -y mkcert create-ca && npx -y mkcert create-cert",
+    "dev:lan": "npx -y http-server -p 3000 -c-1 -S -C cert.crt -K cert.key"
   },
   "keywords": [
     "gemini",

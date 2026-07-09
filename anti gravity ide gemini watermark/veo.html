@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=5" name="viewport">
+    <title>Veo Watermark Remover | Lumina AI</title>
+    <meta name="description" content="Remove the visible Veo watermark from videos. Processes completely locally in your browser. No server uploads. State-of-the-art AI-powered watermark removal.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "surface-variant": "#e0e3e5",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface": "#f7f9fb",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-background": "#191c1e",
+                    "on-primary-fixed": "#07006c",
+                    "inverse-on-surface": "#eff1f3",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f7f9fb",
+                    "surface-container-high": "#e6e8ea",
+                    "primary-container": "#6063ee",
+                    "on-secondary-container": "#006172",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-dim": "#d8dadc",
+                    "tertiary-container": "#6c748b",
+                    "surface-container-low": "#f2f4f6",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e1e0ff",
+                    "secondary-fixed": "#acedff",
+                    "on-surface": "#191c1e",
+                    "surface-container": "#eceef0",
+                    "tertiary-fixed": "#dae2fd",
+                    "primary": "#4648d4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "surface-container-highest": "#e0e3e5",
+                    "background": "#f7f9fb",
+                    "outline-variant": "#c7c4d7",
+                    "on-secondary-fixed": "#001f26",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#545c72",
+                    "surface-tint": "#494bd6",
+                    "on-primary-container": "#fffbff",
+                    "inverse-primary": "#c0c1ff",
+                    "secondary": "#00687a",
+                    "on-tertiary-container": "#fefcff",
+                    "on-tertiary-fixed": "#131b2e",
+                    "secondary-container": "#57dffe",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#464554",
+                    "outline": "#767586"
+                },
+                borderRadius: {
+                    DEFAULT: "0.25rem",
+                    lg: "0.5rem",
+                    xl: "0.75rem",
+                    "2xl": "1rem",
+                    "3xl": "1.5rem",
+                    full: "9999px"
+                },
+                spacing: {
+                    "container-max": "1280px",
+                    gutter: "24px",
+                    base: "8px",
+                    "section-gap-md": "64px",
+                    "margin-mobile": "16px",
+                    "section-gap-lg": "96px"
+                },
+                fontFamily: {
+                    display: ["Plus Jakarta Sans", "sans-serif"],
+                    body: ["Inter", "sans-serif"]
+                },
+                fontSize: {
+                    "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "700" }],
+                    "headline-lg": ["36px", { lineHeight: "1.2", letterSpacing: "-0.03em", fontWeight: "700" }],
+                    "headline-md": ["32px", { lineHeight: "1.3", letterSpacing: "-0.02em", fontWeight: "600" }],
+                    "headline-lg-mobile": ["28px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+                    "body-lg": ["18px", { lineHeight: "1.6", letterSpacing: "-0.01em", fontWeight: "400" }],
+                    "body-md": ["16px", { lineHeight: "1.5", letterSpacing: "-0.01em", fontWeight: "400" }],
+                    "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.02em", fontWeight: "600" }],
+                    "label-sm": ["12px", { lineHeight: "1.2", letterSpacing: "0.01em", fontWeight: "500" }]
+                }
+            }
+        }
+    };
+    </script>
+
+    <style>
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .gradient-text { background: linear-gradient(135deg, #4648d4 0%, #00687a 50%, #4648d4 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 4s ease-in-out infinite; }
+        .mobile-nav-open { overflow: hidden; }
+        #mobile-menu { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
+        #mobile-menu.active { transform: translateX(0); }
+        
+        /* ====== HERO & BACKGROUND ANIMATIONS ====== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            50% { transform: translateY(15px) scale(0.95) rotate(5deg); }
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(70, 72, 212, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(70, 72, 212, 0.3), 0 0 60px rgba(70, 72, 212, 0.1); }
+        }
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            will-change: transform;
+            z-index: 0;
+        }
+        .hero-orb-1 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(70, 72, 212, 0.2), transparent 70%);
+            top: -80px; right: -60px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .hero-orb-2 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(0, 104, 122, 0.15), transparent 70%);
+            top: 40%; left: -80px;
+            animation: floatReverse 10s ease-in-out infinite;
+        }
+        .hero-orb-3 {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(96, 99, 238, 0.12), transparent 70%);
+            bottom: -40px; right: 20%;
+            animation: float 12s ease-in-out 2s infinite;
+        }
+        .hero-particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(70, 72, 212, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-particle:nth-child(4) { top: 15%; left: 10%; animation: float 6s ease-in-out infinite; }
+        .hero-particle:nth-child(5) { top: 25%; right: 15%; animation: floatReverse 8s ease-in-out 1s infinite; }
+        .hero-particle:nth-child(6) { bottom: 20%; left: 25%; animation: float 7s ease-in-out 0.5s infinite; }
+        
+        .hero-glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(70, 72, 212, 0.12);
+            border-radius: 2rem;
+            padding: 2.5rem 2rem;
+            animation: pulseGlow 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 200%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            animation: shimmer 6s ease-in-out infinite;
+        }
+        .hero-badge { animation: fadeSlideUp 0.6s ease-out both; }
+        .hero-title { animation: fadeSlideUp 0.8s ease-out 0.15s both; }
+        .hero-desc { animation: fadeSlideUp 0.8s ease-out 0.3s both; }
+
+        /* ====== MATCHED VIDEO SIZING ====== */
+        .video-matched-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .video-matched-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .video-matched-grid.portrait {
+            grid-template-columns: repeat(2, minmax(0, 320px));
+            justify-content: center;
+        }
+        @media (max-width: 640px) {
+            .video-matched-grid.portrait {
+                grid-template-columns: 1fr;
+            }
+        }
+        .video-matched-grid .video-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .video-matched-grid video {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            background: #1a1a2e;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(70, 72, 212, 0.15);
+        }
+        .video-matched-grid.portrait video {
+            aspect-ratio: 9/16;
+        }
+
+        /* ====== QUEUE ITEM STYLING ====== */
+        .queue-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .queue-item:hover {
+            border-color: rgba(70, 72, 212, 0.3);
+            background: rgba(70, 72, 212, 0.02);
+        }
+        .queue-item.active {
+            border-color: #4648d4;
+            background: rgba(70, 72, 212, 0.05);
+            box-shadow: 0 4px 12px rgba(70, 72, 212, 0.05);
+        }
+        .queue-details {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+        .queue-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #191c1e;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .queue-state {
+            font-size: 0.75rem;
+            color: #464554;
+            margin-top: 0.125rem;
+        }
+        .queue-item.active .queue-state {
+            font-weight: 500;
+        }
+        .queue-state.st-processing { color: #4648d4; font-weight: 700; }
+        .queue-state.st-done { color: #16a34a; font-weight: 700; }
+        .queue-state.st-error { color: #ba1a1a; font-weight: 700; }
+        
+        .queue-icon-btn {
+            background: transparent;
+            border: none;
+            color: #767586;
+            cursor: pointer;
+            padding: 0.375rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+        .queue-icon-btn:hover {
+            color: #4648d4;
+            background: rgba(70, 72, 212, 0.08);
+        }
+        .queue-icon-btn.rm:hover {
+            color: #ba1a1a;
+            background: rgba(186, 26, 26, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body overflow-x-hidden min-h-screen relative">
+
+<!-- Background decorative elements -->
+<div class="hero-orb hero-orb-1"></div>
+<div class="hero-orb hero-orb-2"></div>
+<div class="hero-orb hero-orb-3"></div>
+<div class="hero-particle"></div>
+<div class="hero-particle"></div>
+<div class="hero-particle"></div>
+
+<!-- ==================== TOP NAV BAR ==================== -->
+<header id="header" class="fixed top-0 z-50 w-full backdrop-blur-xl border-b border-white/20 shadow-sm transition-all duration-300 bg-surface/70">
+    <div class="flex justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto h-16 md:h-20">
+        <div class="flex items-center gap-4 md:gap-8">
+            <a class="font-display font-bold text-on-background text-xl md:text-2xl tracking-tight" href="index.html">Lumina AI</a>
+            <nav class="hidden md:flex items-center gap-6">
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html">Tools</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#studio">Video Remover</a>
+                <a class="text-label-md font-body font-semibold text-primary border-b-2 border-primary pb-1" href="veo.html">Veo Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="remove-synthid.html">SynthID Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#pricing-tag">Pricing</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#faq-tag">Updates</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="user-avatar w-8 h-8 rounded-full border border-outline-variant/30 bg-surface-container-high hidden md:block"></div>
+            <button class="hidden md:block text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" onclick="window.location.href='index.html#studio'">Login</button>
+            <button class="bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md px-4 py-2 md:px-6 md:py-2.5 rounded-xl active:scale-95 transition-all shadow-md hidden md:block" onclick="window.location.href='index.html#studio'">Get Started</button>
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden p-2 text-on-background" onclick="toggleMobileMenu()">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ==================== MOBILE SIDEBAR MENU ==================== -->
+<div class="fixed inset-0 z-[60] bg-surface md:hidden flex flex-col p-gutter" id="mobile-menu">
+    <div class="flex justify-between items-center mb-10">
+        <span class="font-display text-headline-md font-bold text-on-background">Lumina AI</span>
+        <button class="p-2" onclick="toggleMobileMenu()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <nav class="flex flex-col gap-6 font-display text-headline-md font-bold mb-auto">
+        <a class="text-on-surface-variant" href="index.html">Tools</a>
+        <a class="text-on-surface-variant" href="index.html#studio" onclick="toggleMobileMenu()">Video Remover</a>
+        <a class="text-primary" href="veo.html">Veo Remover</a>
+        <a class="text-on-surface-variant" href="remove-synthid.html">SynthID Remover</a>
+        <a class="text-on-surface-variant" href="index.html#pricing-tag" onclick="toggleMobileMenu()">Pricing</a>
+        <a class="text-on-surface-variant" href="index.html#faq-tag" onclick="toggleMobileMenu()">API</a>
+    </nav>
+    <div class="flex flex-col gap-4">
+        <button class="w-full py-4 font-display text-headline-md font-bold text-on-surface-variant border border-outline-variant/30 rounded-2xl" onclick="window.location.href='index.html#studio'">Sign In</button>
+        <button class="w-full py-4 font-display text-headline-md font-bold bg-primary text-on-primary rounded-2xl shadow-lg" onclick="window.location.href='index.html#studio'">Get Started</button>
+    </div>
+</div>
+
+<main class="relative z-10 pt-24 md:pt-36 pb-12">
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="px-margin-mobile md:px-gutter max-w-container-max mx-auto text-center mb-12">
+        <div class="hero-glass-card max-w-4xl mx-auto">
+            <!-- Live Badge -->
+            <div class="hero-badge inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 md:mb-8 shadow-sm">
+                <span class="flex h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
+                <span class="text-label-sm font-body text-primary font-semibold">Processed 100% locally</span>
+            </div>
+            <h1 class="hero-title font-display text-headline-lg-mobile md:text-display-lg text-on-background mb-4 md:mb-6 leading-tight">Remove the <span class="gradient-text">Veo Watermark</span> from your videos</h1>
+            <p class="hero-desc text-body-md md:text-body-lg font-body text-on-surface-variant mb-2 max-w-2xl mx-auto">Clean the "Veo" text mark from videos generated with Veo / Flow — fully in your browser. Nothing is uploaded. The video is processed locally at high bitrate with no quality loss.</p>
+        </div>
+    </section>
+
+    <!-- ==================== WORKSPACE PANEL ==================== -->
+    <section class="px-margin-mobile md:px-gutter max-w-container-max mx-auto pb-12">
+        <div class="bg-surface-container-lowest rounded-[32px] border border-outline-variant/30 shadow-xl p-6 md:p-8 max-w-4xl mx-auto mb-8 relative">
+            <div class="flex items-center gap-2 text-label-sm font-body text-on-surface-variant mb-6">
+                <span class="material-symbols-outlined text-primary text-[18px]">movie</span>
+                <span>Veo Video Cleaner Studio</span>
+            </div>
+
+            <!-- Drag & Dropzone -->
+            <div class="w-full min-h-[260px] border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary/[0.02]" id="veo-drop">
+                <span class="material-symbols-outlined text-on-surface-variant/40 text-5xl mb-4 transition-all">cloud_upload</span>
+                <h3 class="text-lg md:text-xl font-display font-bold text-on-background mb-2">Drop your Veo MP4s here or click to browse</h3>
+                <p class="text-body-md text-on-surface-variant text-center">Up to 20 videos at a time · 720p, 1080p, or 4K</p>
+                <p class="text-label-sm text-on-surface-variant/60 text-center mt-2">Landscape 16:9 or portrait 9:16</p>
+            </div>
+            <input type="file" id="veo-file" accept="video/mp4,video/*" multiple class="hidden">
+
+            <!-- Original files warning note -->
+            <div class="flex gap-3 items-start bg-primary/5 border border-primary/10 rounded-xl p-4 text-body-md text-on-surface-variant mt-6 mb-6">
+                <span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0 mt-0.5">info</span>
+                <p class="text-label-sm leading-relaxed text-on-surface-variant"><strong>Original files only.</strong> Upload the MP4 downloaded directly from Veo / Flow (labs.google). Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.</p>
+            </div>
+
+            <!-- Agreement Box -->
+            <div class="flex items-start gap-3 mb-6">
+                <input type="checkbox" id="veo-agree" checked class="mt-1 w-4 h-4 text-primary bg-surface border-outline-variant rounded focus:ring-primary focus:ring-2">
+                <label for="veo-agree" class="text-label-sm text-on-surface-variant leading-relaxed select-none">I own this media or have permission to edit it. I will not remove third-party copyright marks or creator credits.</label>
+            </div>
+
+            <!-- Queue list and summary -->
+            <div class="flex flex-col gap-3 mb-4 max-h-[240px] overflow-y-auto" id="veo-queue" style="display: none;"></div>
+            <div class="text-label-sm text-on-surface-variant font-medium mb-6" id="veo-queue-summary" style="display: none;"></div>
+
+            <!-- Process buttons controls row -->
+            <div class="flex items-center gap-3 flex-wrap mt-6">
+                <button class="bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md px-6 py-3 rounded-xl active:scale-95 transition-all shadow-md disabled:opacity-40 disabled:pointer-events-none" id="veo-process" disabled>Remove Veo Watermark</button>
+                <button class="bg-primary hover:bg-primary-container text-on-primary font-body font-semibold text-label-md px-6 py-3 rounded-xl active:scale-95 transition-all shadow-md" id="veo-process-all" style="display:none">Remove From All</button>
+                <button class="bg-surface border border-outline-variant/30 hover:border-primary/50 text-on-surface-variant hover:text-primary font-body font-semibold text-label-md px-6 py-3 rounded-xl active:scale-95 transition-all shadow-sm" id="veo-download" style="display:none">Download Cleaned MP4</button>
+                <button class="bg-surface border border-outline-variant/30 hover:border-primary/50 text-on-surface-variant hover:text-primary font-body font-semibold text-label-md px-6 py-3 rounded-xl active:scale-95 transition-all shadow-sm" id="veo-download-all" style="display:none">Download All</button>
+                <button class="bg-surface border border-outline-variant/30 hover:border-error/50 text-on-surface-variant hover:text-error font-body font-semibold text-label-md px-6 py-3 rounded-xl active:scale-95 transition-all shadow-sm" id="veo-reset" style="display:none">Start Over</button>
+                <span class="text-label-sm text-on-surface-variant font-medium ml-auto" id="veo-meta"></span>
+            </div>
+
+            <!-- Progress Box -->
+            <div class="mt-6" id="veo-progress" style="display: none;">
+                <div class="flex justify-between items-center text-label-sm text-on-surface-variant mb-2">
+                    <span id="veo-stage">Processing</span>
+                    <span id="veo-pct" class="font-bold">0%</span>
+                </div>
+                <div class="bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+                    <div class="bg-primary h-full transition-all duration-300" id="veo-bar" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Alert Boxes -->
+            <div class="hidden items-start gap-3 p-4 rounded-xl mt-6 bg-error/5 border border-error/15 text-error text-body-md" id="veo-error"></div>
+            <div class="hidden items-start gap-3 p-4 rounded-xl mt-6 bg-green-500/5 border border-green-500/15 text-green-600 text-body-md" id="veo-ok"></div>
+        </div>
+
+        <!-- ==================== VIDEO PREVIEWS PANEL ==================== -->
+        <div class="bg-surface-container-lowest rounded-[32px] border border-outline-variant/30 shadow-xl p-6 md:p-8 max-w-4xl mx-auto relative">
+            <div class="video-matched-grid" id="veo-videos" style="display: none;">
+                <div class="video-container">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-primary text-[16px]">videocam</span>
+                        <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant">Original Video</span>
+                    </div>
+                    <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="veo-src" controls playsinline style="max-height: 28rem;"></video>
+                </div>
+                <div class="video-container">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-green-600 text-[16px]">check_circle</span>
+                        <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-green-600">Cleaned Output</span>
+                    </div>
+                    <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="veo-out" controls playsinline style="max-height: 28rem;"></video>
+                </div>
+            </div>
+            <p class="text-body-md text-on-surface-variant text-center py-8" id="veo-videos-empty">Result preview appears here after processing.</p>
+        </div>
+
+        <!-- ==================== HOW IT WORKS SECTION ==================== -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12 mb-16 relative">
+            <div class="border border-outline-variant/20 rounded-2xl p-6 bg-surface-container-lowest/80 backdrop-blur-xl shadow-sm transition-all hover:border-primary/30">
+                <b class="text-primary font-display text-headline-md block mb-2">01 · Upload</b>
+                <p class="text-body-md text-on-surface-variant leading-relaxed">Pick the original Veo MP4. It stays on your device — everything runs locally with WebCodecs.</p>
+            </div>
+            <div class="border border-outline-variant/20 rounded-2xl p-6 bg-surface-container-lowest/80 backdrop-blur-xl shadow-sm transition-all hover:border-primary/30">
+                <b class="text-primary font-display text-headline-md block mb-2">02 · Auto-detect</b>
+                <p class="text-body-md text-on-surface-variant leading-relaxed">The "Veo" text mark is located in the bottom-right corner and its opacity is estimated per video.</p>
+            </div>
+            <div class="border border-outline-20 rounded-2xl p-6 bg-surface-container-lowest/80 backdrop-blur-xl shadow-sm transition-all hover:border-primary/30">
+                <b class="text-primary font-display text-headline-md block mb-2">03 · Download</b>
+                <p class="text-body-md text-on-surface-variant leading-relaxed">The mark is unblended pixel-exact and the video re-encoded at high bitrate. Save the clean MP4.</p>
+            </div>
+        </div>
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer class="text-center text-label-sm text-on-surface-variant/70 py-12 border-t border-outline-variant/20 max-w-4xl mx-auto">
+            Runs entirely in Chrome / Edge with WebCodecs. For media you own or are authorised to edit only.
+        </footer>
+    </section>
+</main>
+
+<script>
+// Mobile menu toggle logic matching index.html
+function toggleMobileMenu() {
+    const menu = document.getElementById("mobile-menu");
+    menu.classList.toggle("active");
+    document.body.classList.toggle("mobile-nav-open");
+}
+</script>
+
+<script src="vendor/mp4box.all.min.js"></script>
+<script src="vendor/mp4-muxer.min.js"></script>
+<script type="module" src="veo-app.js?v=6"></script>
+</body>
+</html>

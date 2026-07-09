@@ -65,6 +65,31 @@ Because this application uses standard ES6 Javascript Modules (`import` / `expor
 
 ---
 
+## 📱 Access from phone / other devices (LAN)
+
+Video cleaning uses the WebCodecs API, which browsers only enable in a **secure context**. `http://localhost:3000` qualifies on the dev machine, but `http://<lan-ip>:3000` from a phone does not — the page loads, but video processing fails. Serve over HTTPS instead:
+
+1. **Generate a local certificate (one time)**:
+   ```bash
+   npm run cert
+   ```
+   This creates self-signed `ca.*` / `cert.*` files in the project root (git-ignored — never commit them).
+
+2. **Start the HTTPS server**:
+   ```bash
+   npm run dev:lan
+   ```
+
+3. **Find your machine's LAN IP**: run `ipconfig` (Windows) or `ifconfig` (macOS/Linux) and look for the IPv4 address, e.g. `192.168.1.42`.
+
+4. **Open on the phone**: navigate to `https://<lan-ip>:3000` (note **https**). The browser shows a "connection not private" warning because the certificate is self-signed — tap **Advanced → Proceed** once per device.
+
+5. **Firewall**: if the phone can't connect, allow Node.js through Windows Firewall when prompted (or add an inbound rule for port 3000).
+
+**Device-side browser support**: video cleaning needs a Chromium browser (Chrome or Edge on Android or desktop). Image cleaning is Canvas-based and works in any modern mobile browser, including iOS Safari.
+
+---
+
 ## ⚠️ Browser Compatibility
 
 This tool requires the modern **WebCodecs API** (`VideoDecoder` and `VideoEncoder`) and **local MP4 recording/muxing** support.

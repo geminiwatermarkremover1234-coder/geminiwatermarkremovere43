@@ -1,0 +1,34 @@
+- generic [ref=f5e2]:
+  - banner [ref=f5e3]:
+    - generic [ref=f5e4]: VeoClean
+    - link "← Gemini Remover" [ref=f5e5] [cursor=pointer]:
+      - /url: index.html
+  - heading "Remove the Veo watermark from your videos" [level=1] [ref=f5e6]:
+    - text: Remove the
+    - emphasis [ref=f5e7]: Veo
+    - text: watermark from your videos
+  - paragraph [ref=f5e8]: Clean the "Veo" text mark from videos you generated with Veo / Flow — fully in your browser. Nothing is uploaded, the video is decoded, cleaned frame by frame, and re-encoded locally at high bitrate. No blur, no quality loss.
+  - generic [ref=f5e9]:
+    - generic [ref=f5e10] [cursor=pointer]:
+      - generic [ref=f5e11]: 🎬
+      - heading "Drop your Veo MP4 here or click to browse" [level=3] [ref=f5e12]
+      - paragraph [ref=f5e13]: 720p · 1080p · 4K — landscape 16:9 or portrait 9:16
+    - generic [ref=f5e14]:
+      - generic [ref=f5e15]: ℹ️
+      - generic [ref=f5e16]: Original files only. Upload the MP4 downloaded directly from Veo / Flow (labs.google). Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.
+    - generic [ref=f5e17]:
+      - checkbox "I own this media or have permission to edit it. I will not remove third-party copyright marks or creator credits." [checked] [ref=f5e18]
+      - generic [ref=f5e19]: I own this media or have permission to edit it. I will not remove third-party copyright marks or creator credits.
+    - button "Remove Veo Watermark" [disabled] [ref=f5e21]
+  - paragraph [ref=f5e23]: Result preview appears here after processing.
+  - generic [ref=f5e24]:
+    - generic [ref=f5e25]:
+      - generic [ref=f5e26]: 01 · Upload
+      - paragraph [ref=f5e27]: Pick the original Veo MP4. It stays on your device — everything runs locally with WebCodecs.
+    - generic [ref=f5e28]:
+      - generic [ref=f5e29]: 02 · Auto-detect
+      - paragraph [ref=f5e30]: The "Veo" text mark is located in the bottom-right corner and its opacity is estimated per video.
+    - generic [ref=f5e31]:
+      - generic [ref=f5e32]: 03 · Download
+      - paragraph [ref=f5e33]: The mark is unblended pixel-exact and the video re-encoded at high bitrate. Save the clean MP4.
+  - contentinfo [ref=f5e34]: Runs entirely in Chrome / Edge with WebCodecs. For media you own or are authorised to edit only.
