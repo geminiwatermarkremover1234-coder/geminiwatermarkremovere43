@@ -1,46 +1,28 @@
-# Astro Starter Kit: Basics
+# Lumina AI - Video Watermark Remover
 
-```sh
-npm create astro@latest -- --template basics
-```
+A fully client-side browser application to remove visible watermark logos from Gemini Omni/Veo/Flow videos using WebCodecs and pixel-level unblending.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+🔗 **Live Website:** [https://anti-gravity-astro.geminiwatermarkremover1234.workers.dev](https://anti-gravity-astro.geminiwatermarkremover1234.workers.dev)
 
-## 🚀 Project Structure
+## 🚀 Key Features
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+- **100% Local Processing**: All video frame unblending, canvas operations, and re-encoding run fully in your browser (no server uploads).
+- **Astro & Tailwind Styling**: Premium, responsive dashboard built with Astro and Tailwind CSS.
+- **WebCodecs Support**: Ultra-fast frame rendering and processing inside Chrome and Edge browsers.
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command | Action |
+| :--- | :--- |
+| `npm install` | Installs dependencies |
+| `npm run dev` | Starts local dev server |
+| `npm run build` | Builds the static website to `./dist/` |
+| `npm run deploy` | Deploys the static website manually to Cloudflare Workers |
 
-## 👀 Want to learn more?
+## 📦 CI/CD Deployment
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+This repository is integrated with **GitHub Actions**. Any pushes to the `main` branch will automatically trigger:
+1. Build compilation (`npm run build`)
+2. Deployment to Cloudflare Workers (`npx wrangler deploy`)
