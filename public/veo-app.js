@@ -5,6 +5,144 @@
  */
 import { processVideoWatermark } from './processor.js?v=16';
 
+// Adsterra Ads Configuration
+const ADSTERRA_CONFIG = {
+    enabled: true,
+    domain: 'www.highperformanceformat.com', 
+    smartlink: 'https://www.effectivecpmnetwork.com/s6dtym12bw?key=030513107fcec21d9592501debed4142',
+    placements: {
+        topBanner: '30196363',      // 728x90_1
+        belowUpload: '30196361',    // 300x250_1
+        belowResult: '30196361',    // 300x250_1
+        leftSidebar: '30196362',    // 160x600_1
+        rightSidebar: '30196362',   // 160x600_1
+        stickyMobile: '30196360',    // 320x50_1
+        socialBar: '30196365'       // SocialBar_1
+    }
+};
+
+function loadAdsterraAd(containerId, slotKey, width, height) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    // Clear previous ad
+    container.innerHTML = "";
+    
+    if (!ADSTERRA_CONFIG.enabled || !slotKey || slotKey.startsWith("YOUR_")) {
+        container.innerHTML = `<div class="text-on-surface-variant/20 italic p-4 text-center">Advertisement (${width}x${height})</div>`;
+        return;
+    }
+
+    const frame = document.createElement("iframe");
+    frame.src = `about:blank`;
+    frame.width = width;
+    frame.height = height;
+    frame.scrolling = "no";
+    frame.frameBorder = "0";
+    frame.style.border = "none";
+    frame.style.overflow = "hidden";
+    
+    container.appendChild(frame);
+    
+    try {
+        const frameDoc = frame.contentWindow.document || frame.contentDocument;
+        frameDoc.open();
+        frameDoc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head><style>body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; background: transparent; }</style></head>
+            <body>
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '${slotKey}',
+                        'format' : 'iframe',
+                        'height' : ${height},
+                        'width' : ${width},
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//${ADSTERRA_CONFIG.domain}/${slotKey}/invoke.js"></script>
+            </body>
+            </html>
+        `);
+        frameDoc.close();
+    } catch (e) {
+        console.error("Failed to load ad frame:", e);
+    }
+}
+
+function loadAdsterraSocialBar() {
+    const slotKey = ADSTERRA_CONFIG.placements.socialBar;
+    if (!ADSTERRA_CONFIG.enabled || !slotKey || slotKey.startsWith("YOUR_")) return;
+    
+    if (document.getElementById(`ad-socialbar-script`)) return;
+
+    const script = document.createElement("script");
+    script.id = `ad-socialbar-script`;
+    script.type = "text/javascript";
+    script.src = `//${ADSTERRA_CONFIG.domain}/${slotKey}/invoke.js`;
+    document.body.appendChild(script);
+}
+
+function showInterstitialAdGate(onUnlock) {
+    const modal = document.getElementById("ad-interstitial-modal");
+    const timerText = document.getElementById("ad-timer-text");
+    const unlockBtn = document.getElementById("ad-unlock-btn");
+    const unlockBtnText = document.getElementById("ad-unlock-btn-text");
+    
+    if (!modal) {
+        onUnlock();
+        return;
+    }
+    
+    // Show modal
+    modal.classList.remove("hidden");
+    
+    // Load banner inside interstitial
+    loadAdsterraAd("ad-interstitial-banner", ADSTERRA_CONFIG.placements.belowResult, 300, 250);
+    
+    // Load Social Bar ad
+    loadAdsterraSocialBar();
+    
+    // Start countdown
+    let timeLeft = 5;
+    unlockBtn.disabled = true;
+    timerText.innerText = `Preparing your download link... ${timeLeft}s`;
+    unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
+    
+    const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            timerText.innerText = "Your download is ready!";
+            unlockBtnText.innerText = "Unlock & Download";
+            unlockBtn.disabled = false;
+        } else {
+            timerText.innerText = `Preparing your download link... ${timeLeft}s`;
+            unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
+        }
+    }, 1000);
+    
+    const unlockHandler = () => {
+        clearInterval(interval);
+        
+        // Open smartlink in a new tab
+        if (ADSTERRA_CONFIG.smartlink) {
+            window.open(ADSTERRA_CONFIG.smartlink, "_blank");
+        }
+        
+        // Hide modal
+        modal.classList.add("hidden");
+        
+        // Call unlock callback
+        onUnlock();
+        
+        unlockBtn.removeEventListener("click", unlockHandler);
+    };
+    
+    unlockBtn.addEventListener("click", unlockHandler);
+}
+
 const SUPPORTED = new Set(["1280x720", "720x1280", "1920x1080", "1080x1920", "3840x2160", "2160x3840"]);
 const MAX_QUEUE = 20;
 
@@ -130,14 +268,21 @@ function selectItem(index) {
     srcVideo.src = item.sourceUrl;
     if (item.outputUrl) {
         outVideo.src = item.outputUrl;
+        downloadBtn.style.display = "inline-block";
+        document.getElementById("ad-below-upload-wrapper").style.display = "none";
+        document.getElementById("ad-below-result-wrapper").style.display = "flex";
+        loadAdsterraAd("ad-below-result-container", ADSTERRA_CONFIG.placements.belowResult, 300, 250);
     } else {
         outVideo.removeAttribute("src");
+        downloadBtn.style.display = "none";
+        document.getElementById("ad-below-upload-wrapper").style.display = "flex";
+        document.getElementById("ad-below-result-wrapper").style.display = "none";
+        loadAdsterraAd("ad-below-upload-container", ADSTERRA_CONFIG.placements.belowUpload, 300, 250);
     }
     videosGrid.style.display = "grid";
     videosGrid.classList.toggle("portrait", item.dims.h > item.dims.w);
     videosEmpty.style.display = "none";
 
-    downloadBtn.style.display = item.outputUrl ? "inline-block" : "none";
     resetBtn.style.display = "inline-block";
     processBtn.disabled = busy || item.status === "processing" || item.status === "done";
 
@@ -255,7 +400,6 @@ async function processItem(index, batchLabel) {
     item.status = "done";
     if (index === activeIndex) {
         outVideo.src = item.outputUrl;
-        downloadBtn.style.display = "inline-block";
     }
     renderQueue();
 }
@@ -284,13 +428,28 @@ async function run() {
 
     try {
         await processItem(activeIndex);
-        showOk("Veo watermark removed. Preview the result below, then download.");
+        
+        // Hide progress panel and set busy false BEFORE showing ad gate
+        progressBox.style.display = "none";
+        setBusy(false);
+        
+        showInterstitialAdGate(() => {
+            if (activeIndex === activeIndex) {
+                downloadBtn.style.display = "inline-block";
+                
+                // Show below-result ad, hide below-upload
+                document.getElementById("ad-below-upload-wrapper").style.display = "none";
+                document.getElementById("ad-below-result-wrapper").style.display = "flex";
+                loadAdsterraAd("ad-below-result-container", ADSTERRA_CONFIG.placements.belowResult, 300, 250);
+            }
+            renderQueue();
+            showOk("Veo watermark removed. Preview the result below, then download.");
+        });
     } catch (err) {
         console.error("Veo processing failed:", err);
         item.status = "error";
         item.error = err.message || "Processing failed unexpectedly.";
         showError(item.error);
-    } finally {
         setBusy(false);
         progressBox.style.display = "none";
         renderQueue();
@@ -328,9 +487,25 @@ async function runAll() {
 
     setBusy(false);
     progressBox.style.display = "none";
-    renderQueue();
-    if (done > 0) showOk(`Bulk processing finished: ${done} cleaned${failed ? `, ${failed} failed` : ""}. Use Download All to save them.`);
-    else if (failed > 0) showError("All videos in the batch failed. Make sure they are original Veo / Flow MP4s.");
+
+    if (done > 0) {
+        // Hide download all button initially until ad is cleared
+        downloadAllBtn.style.display = "none";
+        
+        showInterstitialAdGate(() => {
+            renderQueue();
+            
+            // Show below-result ad, hide below-upload
+            document.getElementById("ad-below-upload-wrapper").style.display = "none";
+            document.getElementById("ad-below-result-wrapper").style.display = "flex";
+            loadAdsterraAd("ad-below-result-container", ADSTERRA_CONFIG.placements.belowResult, 300, 250);
+            
+            showOk(`Bulk processing finished: ${done} cleaned${failed ? `, ${failed} failed` : ""}. Use Download All to save them.`);
+        });
+    } else {
+        renderQueue();
+        if (failed > 0) showError("All videos in the batch failed. Make sure they are original Veo / Flow MP4s.");
+    }
 }
 
 function reset() {
@@ -395,3 +570,10 @@ processAllBtn.addEventListener("click", runAll);
 downloadBtn.addEventListener("click", download);
 downloadAllBtn.addEventListener("click", downloadAll);
 resetBtn.addEventListener("click", reset);
+
+// Load static ads
+loadAdsterraAd("ad-top-banner", ADSTERRA_CONFIG.placements.topBanner, 728, 90);
+loadAdsterraAd("ad-left-sidebar", ADSTERRA_CONFIG.placements.leftSidebar, 160, 600);
+loadAdsterraAd("ad-right-sidebar", ADSTERRA_CONFIG.placements.rightSidebar, 160, 600);
+loadAdsterraAd("ad-sticky-mobile-banner", ADSTERRA_CONFIG.placements.stickyMobile, 320, 50);
+loadAdsterraAd("ad-below-upload-container", ADSTERRA_CONFIG.placements.belowUpload, 300, 250);

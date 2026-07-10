@@ -358,6 +358,20 @@
 
 <body class="bg-surface text-on-surface font-body overflow-x-hidden">
 
+<!-- Left & Right Sidebar Ads (160x600) -->
+<div class="fixed left-2 top-24 hidden xl:flex flex-col items-center z-40 w-[160px] h-[600px] bg-surface-container-low border border-outline-variant/20 rounded-xl justify-center text-xs text-on-surface-variant/40 overflow-hidden" id="ad-left-sidebar-wrapper">
+    <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider mb-2 mt-2">Advertisement</span>
+    <div id="ad-left-sidebar" class="w-full h-full flex items-center justify-center">
+        Ad (160x600)
+    </div>
+</div>
+<div class="fixed right-2 top-24 hidden xl:flex flex-col items-center z-40 w-[160px] h-[600px] bg-surface-container-low border border-outline-variant/20 rounded-xl justify-center text-xs text-on-surface-variant/40 overflow-hidden" id="ad-right-sidebar-wrapper">
+    <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider mb-2 mt-2">Advertisement</span>
+    <div id="ad-right-sidebar" class="w-full h-full flex items-center justify-center">
+        Ad (160x600)
+    </div>
+</div>
+
 <!-- ==================== TOP NAV BAR ==================== -->
 <header id="header" class="fixed top-0 z-50 w-full backdrop-blur-xl border-b border-white/20 shadow-sm transition-all duration-300 bg-surface/70">
     <div class="flex justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto h-16 md:h-20">
@@ -401,6 +415,13 @@
     <div class="flex flex-col gap-4">
         <button class="w-full py-4 font-display text-headline-md font-bold text-on-surface-variant border border-outline-variant/30 rounded-2xl" onclick="toggleMobileMenu(); document.getElementById('login-btn').click();">Sign In</button>
         <button class="w-full py-4 font-display text-headline-md font-bold bg-primary text-on-primary rounded-2xl shadow-lg" onclick="toggleMobileMenu(); window.location.hash='studio';">Get Started</button>
+    </div>
+</div>
+
+<!-- Top Banner Ad (728x90) -->
+<div class="w-full hidden md:flex justify-center mt-24 md:mt-28 px-margin-mobile">
+    <div id="ad-top-banner" class="w-[728px] h-[90px] bg-surface-container-low border border-outline-variant/20 rounded-xl flex items-center justify-center overflow-hidden text-xs text-on-surface-variant/40">
+        Advertisement (728x90)
     </div>
 </div>
 
@@ -466,36 +487,57 @@
 
             <!-- Main Dashboard Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
-                <!-- LEFT: Viewer Panel -->
-                <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/30 shadow-xl overflow-hidden min-h-[360px] flex items-center justify-center p-4 md:p-6" id="viewer-panel">
-                    <!-- Dropzone (shown by default) -->
-                    <div class="dropzone w-full min-h-[300px] border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary/[0.02]" id="dropzone">
-                        <span class="material-symbols-outlined text-on-surface-variant/40 text-5xl mb-4 transition-all">cloud_upload</span>
-                        <h3 class="text-lg md:text-xl font-display font-bold text-on-background mb-2">Upload a 720p, 1080p, or 4K Gemini video</h3>
-                        <p class="text-body-md text-on-surface-variant text-center">Landscape and portrait. Drag & drop or click to upload.</p>
-                        <p class="text-body-md text-on-surface-variant/70 text-center mt-2 max-w-md"><strong>Note:</strong> Upload the original MP4 downloaded directly from Gemini. Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.</p>
-                    </div>
-                    <input type="file" id="file-input" accept="video/*" multiple style="display: none;">
-
-                    <!-- Active video viewer (hidden initially) -->
-                    <div class="video-matched-grid w-full" id="preview-grid" style="display: none;">
-                        <div class="video-container">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-primary text-[16px]">videocam</span>
-                                <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant">Original Video</span>
-                            </div>
-                            <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="src-video" controls playsinline style="max-height: 28rem;"></video>
+                <!-- LEFT: Viewer Panel & Ads -->
+                <div class="flex flex-col gap-4">
+                    <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/30 shadow-xl overflow-hidden min-h-[360px] flex items-center justify-center p-4 md:p-6" id="viewer-panel">
+                        <!-- Dropzone (shown by default) -->
+                        <div class="dropzone w-full min-h-[300px] border-2 border-dashed border-outline-variant/40 rounded-2xl flex flex-col items-center justify-center p-8 cursor-pointer transition-all hover:border-primary/50 hover:bg-primary/[0.02]" id="dropzone">
+                            <span class="material-symbols-outlined text-on-surface-variant/40 text-5xl mb-4 transition-all">cloud_upload</span>
+                            <h3 class="text-lg md:text-xl font-display font-bold text-on-background mb-2">Upload a 720p, 1080p, or 4K Gemini video</h3>
+                            <p class="text-body-md text-on-surface-variant text-center">Landscape and portrait. Drag & drop or click to upload.</p>
+                            <p class="text-body-md text-on-surface-variant/70 text-center mt-2 max-w-md"><strong>Note:</strong> Upload the original MP4 downloaded directly from Gemini. Videos re-encoded by WhatsApp, Telegram, or social media lose the watermark signature and cannot be cleaned.</p>
                         </div>
-                        <div class="video-container" id="dest-video-container" style="display: none;">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="material-symbols-outlined text-green-600 text-[16px]">check_circle</span>
-                                <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-green-600">Cleaned Output</span>
+                        <input type="file" id="file-input" accept="video/*" multiple style="display: none;">
+
+                        <!-- Active video viewer (hidden initially) -->
+                        <div class="video-matched-grid w-full" id="preview-grid" style="display: none;">
+                            <div class="video-container">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-primary text-[16px]">videocam</span>
+                                    <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-on-surface-variant">Original Video</span>
+                                </div>
+                                <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="src-video" controls playsinline style="max-height: 28rem;"></video>
                             </div>
-                            <div class="relative">
-                                <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="dest-video" controls playsinline style="max-height: 28rem;"></video>
-                                <button class="absolute top-3 right-3 w-9 h-9 rounded-lg bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" id="zoom-video-btn" title="Zoom/Fullscreen Preview">
-                                    <span class="material-symbols-outlined text-[20px]">zoom_in</span>
-                                </button>
+                            <div class="video-container" id="dest-video-container" style="display: none;">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="material-symbols-outlined text-green-600 text-[16px]">check_circle</span>
+                                    <span class="text-label-sm font-body font-semibold uppercase tracking-wider text-green-600">Cleaned Output</span>
+                                </div>
+                                <div class="relative">
+                                    <video class="w-full bg-inverse-surface rounded-xl border border-outline-variant/20 object-contain" id="dest-video" controls playsinline style="max-height: 28rem;"></video>
+                                    <button class="absolute top-3 right-3 w-9 h-9 rounded-lg bg-surface-container-lowest/80 backdrop-blur border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" id="zoom-video-btn" title="Zoom/Fullscreen Preview">
+                                        <span class="material-symbols-outlined text-[20px]">zoom_in</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 300x250 below upload -->
+                    <div id="ad-below-upload-wrapper" class="w-full flex justify-center">
+                        <div id="ad-below-upload" class="w-[300px] h-[250px] bg-surface-container-lowest border border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center overflow-hidden text-xs text-on-surface-variant/40 shadow-md">
+                            <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider mb-2 mt-2">Advertisement</span>
+                            <div id="ad-below-upload-container" class="w-full h-full flex items-center justify-center">
+                                Ad (300x250)
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 300x250 below result -->
+                    <div id="ad-below-result-wrapper" class="w-full flex justify-center" style="display: none;">
+                        <div id="ad-below-result" class="w-[300px] h-[250px] bg-surface-container-lowest border border-outline-variant/30 rounded-2xl flex flex-col items-center justify-center overflow-hidden text-xs text-on-surface-variant/40 shadow-md">
+                            <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider mb-2 mt-2">Advertisement</span>
+                            <div id="ad-below-result-container" class="w-full h-full flex items-center justify-center">
+                                Ad (300x250)
                             </div>
                         </div>
                     </div>
@@ -1172,6 +1214,50 @@
 
 <!-- Main Application Script (unchanged app.js with all working logic) -->
 <script is:inline type="module" src="app.js?v=15"></script>
+
+<!-- Sticky Mobile Banner Ad -->
+<div id="ad-sticky-mobile" class="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface-container-lowest border-t border-outline-variant/20 flex flex-col items-center justify-center py-1">
+    <div class="w-full flex justify-between px-4 mb-0.5">
+        <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider">Advertisement</span>
+        <button onclick="document.getElementById('ad-sticky-mobile').style.display='none'" class="text-xs text-on-surface-variant hover:text-error flex items-center">
+            <span class="material-symbols-outlined text-sm">close</span>
+        </button>
+    </div>
+    <div id="ad-sticky-mobile-banner" class="w-[320px] h-[50px] bg-surface-container-low border border-outline-variant/20 rounded-lg flex items-center justify-center overflow-hidden text-xs text-on-surface-variant/40">
+        Ad Banner (320x50)
+    </div>
+</div>
+
+<!-- Interstitial Ad Gate Modal -->
+<div id="ad-interstitial-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden" style="background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);">
+    <div class="bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-6 md:p-8 max-w-md w-[90vw] shadow-2xl flex flex-col items-center text-center relative overflow-hidden">
+        <!-- Premium header decoration -->
+        <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-2xl animate-bounce">lock</span>
+        </div>
+        
+        <h3 class="font-display font-bold text-xl text-on-background mb-2">Watermark Removed Successfully!</h3>
+        <p class="text-body-md text-on-surface-variant mb-6" id="ad-timer-text">Preparing your download link... 5s</p>
+        
+        <!-- Ad container inside modal -->
+        <div class="w-[300px] h-[250px] bg-surface-container-low border border-outline-variant/20 rounded-xl flex flex-col items-center justify-center overflow-hidden mb-6 relative">
+            <span class="text-[10px] text-on-surface-variant/40 font-bold uppercase tracking-wider mb-2 mt-2">Advertisement</span>
+            <div id="ad-interstitial-banner" class="w-full h-full flex items-center justify-center text-xs text-on-surface-variant/40">
+                Loading Ad...
+            </div>
+        </div>
+        
+        <!-- Close / Unlock Button -->
+        <button id="ad-unlock-btn" disabled class="w-full py-3 px-6 rounded-xl bg-primary text-on-primary font-body font-semibold text-label-md shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-sm">download</span>
+            <span id="ad-unlock-btn-text">Unlock Download (5s)</span>
+        </button>
+        
+        <p class="text-[11px] text-on-surface-variant/60 mt-3">
+            Clicking unlock helps keep this service 100% free. Thank you for your support!
+        </p>
+    </div>
+</div>
 
 </body>
 </html>
