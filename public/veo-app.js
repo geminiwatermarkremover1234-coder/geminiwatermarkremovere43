@@ -108,33 +108,28 @@ function showInterstitialAdGate(onUnlock) {
     let timeLeft = 5;
     unlockBtn.disabled = true;
     timerText.innerText = `Preparing your download link... ${timeLeft}s`;
-    unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
+    unlockBtnText.innerText = `Close Ad & Download (${timeLeft}s)`;
     
     const interval = setInterval(() => {
         timeLeft--;
         if (timeLeft <= 0) {
             clearInterval(interval);
             timerText.innerText = "Your download is ready!";
-            unlockBtnText.innerText = "Unlock & Download";
+            unlockBtnText.innerText = "Close Ad & Download";
             unlockBtn.disabled = false;
         } else {
             timerText.innerText = `Preparing your download link... ${timeLeft}s`;
-            unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
+            unlockBtnText.innerText = `Close Ad & Download (${timeLeft}s)`;
         }
     }, 1000);
     
     const unlockHandler = () => {
         clearInterval(interval);
         
-        // Open smartlink in a new tab
-        if (ADSTERRA_CONFIG.smartlink) {
-            window.open(ADSTERRA_CONFIG.smartlink, "_blank");
-        }
-        
         // Hide modal
         modal.classList.add("hidden");
         
-        // Call unlock callback
+        // Call unlock callback to trigger auto download
         onUnlock();
         
         unlockBtn.removeEventListener("click", unlockHandler);
