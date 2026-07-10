@@ -15,7 +15,7 @@
     <meta name="f1268d5c49a5a670cd97a603f831b1c5501234a0" content="f1268d5c49a5a670cd97a603f831b1c5501234a0" />
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=5" name="viewport">
-    <title>Veo Watermark Remover | Lumina AI</title>
+    <title>Veo Watermark Remover | Gemini Watermark Tool</title>
     <meta name="description" content="Remove the visible Veo watermark from videos. Processes completely locally in your browser. No server uploads. State-of-the-art AI-powered watermark removal.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪄</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -336,11 +336,11 @@
 <header id="header" class="fixed top-0 z-50 w-full backdrop-blur-xl border-b border-white/20 shadow-sm transition-all duration-300 bg-surface/70">
     <div class="flex justify-between items-center w-full px-margin-mobile md:px-gutter max-w-container-max mx-auto h-16 md:h-20">
         <div class="flex items-center gap-4 md:gap-8">
-            <a class="font-display font-bold text-on-background text-xl md:text-2xl tracking-tight" href="index.html">Lumina AI</a>
+            <a class="font-display font-bold text-on-background text-xl md:text-2xl tracking-tight" href="index.html">Gemini Watermark Tool</a>
             <nav class="hidden md:flex items-center gap-6">
-                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html">Tools</a>
-                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#studio">Video Remover</a>
-                <a class="text-label-md font-body font-semibold text-primary border-b-2 border-primary pb-1" href="veo.html">Veo Remover</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a>
+                <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="gemini-omni-video-watermark-remover.html">Gemini Video</a>
+                <a class="text-label-md font-body font-semibold text-primary border-b-2 border-primary pb-1" href="veo.html">Veo Video</a>
                 <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#pricing-tag">Pricing</a>
                 <a class="text-label-md font-body font-semibold text-on-surface-variant hover:text-primary transition-colors" href="index.html#faq-tag">Updates</a>
             </nav>
@@ -360,17 +360,17 @@
 <!-- ==================== MOBILE SIDEBAR MENU ==================== -->
 <div class="fixed inset-0 z-[60] bg-surface md:hidden flex flex-col p-gutter" id="mobile-menu">
     <div class="flex justify-between items-center mb-10">
-        <span class="font-display text-headline-md font-bold text-on-background">Lumina AI</span>
+        <span class="font-display text-headline-md font-bold text-on-background">Gemini Watermark Tool</span>
         <button class="p-2" onclick="toggleMobileMenu()">
             <span class="material-symbols-outlined">close</span>
         </button>
     </div>
     <nav class="flex flex-col gap-6 font-display text-headline-md font-bold mb-auto">
-        <a class="text-on-surface-variant" href="index.html">Tools</a>
-        <a class="text-on-surface-variant" href="index.html#studio" onclick="toggleMobileMenu()">Video Remover</a>
-        <a class="text-primary" href="veo.html">Veo Remover</a>
+        <a class="text-on-surface-variant" href="index.html" onclick="toggleMobileMenu()">Home</a>
+        <a class="text-on-surface-variant" href="gemini-omni-video-watermark-remover.html" onclick="toggleMobileMenu()">Gemini Video</a>
+        <a class="text-primary" href="veo.html" onclick="toggleMobileMenu()">Veo Video</a>
         <a class="text-on-surface-variant" href="index.html#pricing-tag" onclick="toggleMobileMenu()">Pricing</a>
-        <a class="text-on-surface-variant" href="index.html#faq-tag" onclick="toggleMobileMenu()">API</a>
+        <a class="text-on-surface-variant" href="index.html#faq-tag" onclick="toggleMobileMenu()">Updates</a>
     </nav>
     <div class="flex flex-col gap-4">
         <button class="w-full py-4 font-display text-headline-md font-bold text-on-surface-variant border border-outline-variant/30 rounded-2xl" onclick="window.location.href='index.html#studio'">Sign In</button>
@@ -516,9 +516,101 @@
         </div>
 
         <!-- ==================== FOOTER ==================== -->
-        <footer class="text-center text-label-sm text-on-surface-variant/70 py-12 border-t border-outline-variant/20 max-w-4xl mx-auto">
-            Runs entirely in Chrome / Edge with WebCodecs. For media you own or are authorised to edit only.
-        </footer>
+<footer class="mt-32 border-t border-outline-variant/30 bg-surface-container-lowest/30 pt-24 pb-12 w-full">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter">
+    <div class="grid gap-16 lg:grid-cols-4 lg:gap-8 text-left">
+      <div class="col-span-1 lg:col-span-1">
+        <a class="flex items-center gap-3 group" href="index.html">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-sparkles" aria-hidden="true">
+              <path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"></path>
+              <path d="m14 7 3 3"></path>
+              <path d="M5 6v4"></path>
+              <path d="M19 14v4"></path>
+              <path d="M10 2v2"></path>
+              <path d="M7 8H3"></path>
+              <path d="M21 16h-4"></path>
+              <path d="M11 3H9"></path>
+            </svg>
+          </div>
+          <span class="text-lg font-black tracking-tighter text-on-surface">Gemini Watermark <span class="text-primary italic">Tool</span></span>
+        </a>
+        <p class="mt-8 text-sm leading-relaxed text-on-surface-variant/80 font-medium">Authorised media branding and privacy editing tool for owned or permitted files. Add logos, text watermarks, brand overlays, privacy blur, and authorised watermark edits with clear safe-use rules.</p>
+        <a href="mailto:sonusahublogger@gmail.com" class="mt-5 inline-flex text-sm font-black text-primary hover:underline">sonusahublogger@gmail.com</a>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-12 sm:grid-cols-3 lg:col-span-3 lg:pl-12">
+        <div>
+          <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">Tool</h4>
+          <ul class="mt-8 space-y-4">
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="index.html">Home</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="gemini-omni-video-watermark-remover.html">Gemini Video</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="veo.html">Veo Video</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="index.html#studio">Gemini Image</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="logo-adder-to-video-or-images.html">Logo Adder</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="text-watermark-adder-to-video.html">Text Watermark Tool</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="blur-to-video-or-images.html">Privacy Blur Tool</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="index.html#pricing-tag">Pricing</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">Resources</h4>
+          <ul class="mt-8 space-y-4">
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="about.html">About</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="blog.html">Blog</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-span-2 sm:col-span-1">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">Privacy</h4>
+          <ul class="mt-8 space-y-4">
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="privacy.html">Privacy Policy</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="terms.html">Terms of Use</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="refund-policy.html">Refund Policy</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="safe-use-policy.html">Safe Use Policy</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="report-abuse.html">Report Abuse</a></li>
+            <li><a class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors" href="disclaimer.html">Disclaimer</a></li>
+            <li class="flex items-center gap-2 rounded-lg border-2 border-primary/20 bg-primary/5 px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary w-fit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield" aria-hidden="true">
+                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+              </svg>
+              Owned Media Only
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-24 flex flex-col items-center justify-between gap-8 border-t border-outline-variant/30 pt-10 text-center text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/70 md:flex-row md:text-left">
+      <div class="flex flex-col gap-4 w-full md:w-auto">
+        <a href="https://toolfame.com/item/gemini-watermark-remove" target="_blank" rel="noopener noreferrer" class="opacity-80 hover:opacity-100 transition-opacity flex justify-center md:justify-start">
+          <img src="https://toolfame.com/badge-dark.svg" alt="Featured on toolfame.com" style="height:54px;width:auto" crossorigin="anonymous"/>
+        </a>
+        <div class="flex flex-col gap-2">
+          <p>© 2026 Gemini Watermark Tool. All rights reserved.</p>
+          <p class="opacity-60 tracking-normal font-medium normal-case text-xs">For owned or authorised media only. Usually responds within 2 business days.</p>
+          <p class="opacity-60 tracking-normal font-medium normal-case text-xs">Disclaimer: This product does not belong to Google, Gemini, Veo, Omni, or any third-party brand. Do not use it to remove or hide third-party copyright marks, creator credits, platform marks, or ownership information.</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-center gap-4 w-full md:w-auto">
+        <p class="hidden md:block">Private &amp; Simple</p>
+        <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
+        <a href="contact.html">
+          <button class="relative inline-flex items-center justify-center overflow-hidden rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50 border-2 border-outline-variant bg-transparent hover:bg-surface-container-low text-on-surface hover:border-primary/50 h-9 px-4 text-xs font-bold gap-2" tabindex="0">
+            Contact Us
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail" aria-hidden="true">
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            </svg>
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
     </section>
 </main>
 
