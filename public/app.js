@@ -79,6 +79,14 @@ function loadAdsterraSocialBar() {
     document.body.appendChild(script);
 }
 
+let playerInstance = null;
+const VIDEO_AD_CONFIG = {
+    enabled: true,
+    // Google DoubleClick linear pre-roll testing VAST tag URL
+    vastTag: 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319075/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=',
+    skipOffset: 5 // Skip ad after 5 seconds
+};
+
 function showInterstitialAdGate(onUnlock) {
     const modal = document.getElementById("ad-interstitial-modal");
     const timerText = document.getElementById("ad-timer-text");
@@ -90,42 +98,78 @@ function showInterstitialAdGate(onUnlock) {
         return;
     }
     
-    // Show modal
+    // Show modal, hide download button initially
     modal.classList.remove("hidden");
-    
-    // Load banner inside interstitial
-    loadAdsterraAd("ad-interstitial-banner", ADSTERRA_CONFIG.placements.belowResult, 300, 250);
-    
+    unlockBtn.classList.add("hidden");
+    unlockBtn.disabled = true;
+    timerText.innerText = "Watch this short video to unlock your download...";
+
     // Load Social Bar ad
     loadAdsterraSocialBar();
-    
-    // Start countdown
-    let timeLeft = 5;
-    unlockBtn.disabled = true;
-    timerText.innerText = `Preparing your download link... ${timeLeft}s`;
-    unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
-    
-    const interval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            timerText.innerText = "Your download is ready!";
-            unlockBtnText.innerText = "Unlock & Download";
-            unlockBtn.disabled = false;
-        } else {
-            timerText.innerText = `Preparing your download link... ${timeLeft}s`;
-            unlockBtnText.innerText = `Unlock Download (${timeLeft}s)`;
+
+    // Destroy previous Fluid Player instance if it exists
+    if (playerInstance) {
+        try {
+            playerInstance.destroy();
+        } catch (e) {
+            console.error("Error destroying player:", e);
         }
-    }, 1000);
+    }
+
+    if (!VIDEO_AD_CONFIG.enabled) {
+        unlockBtn.classList.remove("hidden");
+        unlockBtn.disabled = false;
+        timerText.innerText = "Your download is ready!";
+    } else {
+        // Fallback: if ad fails to load or is blocked, unlock after 5 seconds
+        const fallbackTimeout = setTimeout(() => {
+            unlockBtn.classList.remove("hidden");
+            unlockBtn.disabled = false;
+            timerText.innerText = "Your download is ready!";
+        }, 5000);
+
+        // Initialize Fluid Player
+        try {
+            playerInstance = fluidPlayer('ad-video-player', {
+                layoutControls: {
+                    fillToContainer: true,
+                    autoPlay: true,
+                    mute: true, // Muted by default so browsers allow autoplay
+                    playPauseAnimation: false,
+                    controlBar: {
+                        autoHide: true
+                    }
+                },
+                vastOptions: {
+                    adList: [
+                        {
+                            roll: 'preRoll',
+                            vastTag: VIDEO_AD_CONFIG.vastTag
+                        }
+                    ],
+                    skipButtonCapability: true,
+                    skipPosition: 'top-right',
+                    skipOffset: VIDEO_AD_CONFIG.skipOffset
+                }
+            ]);
+
+            // Listen to ad finish/skip to unlock download
+            playerInstance.on('adFinished', () => {
+                clearTimeout(fallbackTimeout);
+                unlockBtn.classList.remove("hidden");
+                unlockBtn.disabled = false;
+                timerText.innerText = "Your download is ready!";
+            });
+        } catch (err) {
+            console.error("Failed to initialize Fluid Player:", err);
+            clearTimeout(fallbackTimeout);
+            unlockBtn.classList.remove("hidden");
+            unlockBtn.disabled = false;
+            timerText.innerText = "Your download is ready!";
+        }
+    }
     
     const unlockHandler = () => {
-        clearInterval(interval);
-        
-        // Open smartlink in a new tab
-        if (ADSTERRA_CONFIG.smartlink) {
-            window.open(ADSTERRA_CONFIG.smartlink, "_blank");
-        }
-        
         // Hide modal
         modal.classList.add("hidden");
         
